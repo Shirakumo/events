@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title><c:splice lquery='(text (or (clip event :title) "New Event"))'></c:splice> - Events</title>
+    <link rel="stylesheet" type="text/css" href="../static/events.css" @href="/static/events/events.css" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="#" @href="events/">
+          <i class="fa fa-plus-square fa-fw"></i>
+          Create Event
+        </a>
+      </nav>
+    </header>
+    <main>
+      <c:when test="error">
+        <div class="infobox error" lquery="(text error)">ERROR</div>
+      </c:when>
+      <c:when test="message">
+        <div class="infobox message" lquery="(text message)">MESSAGE</div>
+      </c:when>
+      <c:using value="event">
+        <form method="post" id="editor">
+          <input id="title" name="title" maxlength="32" placeholder="Event Title" required autofocus lquery="(val title)" />
+          <div id="inputs">
+            <label for="link">Link</label>
+            <input type="url" id="link" name="link" maxlength="64" placeholder="http://..." lquery="(val link)" />
+            <label for="location">Local Time Region</label>
+            <input id="location" name="location" maxlength="32" placeholder="London" required lquery="(val location)" />
+            <label for="start">Starting Date</label>
+            <input type="datetime-local" id="start" name="start" required lquery="(val start)" />
+            <label for="duration">Duration (in minutes)</label>
+            <input type="number" id="duration" name="duration" step="15" min="0" list="default-durations" placeholder="60" lquery="(val duration)" />
+            <datalist id="default-durations">
+              <option value="30" />
+              <option value="60" />
+              <option value="120" />
+              <option value="180" />
+              <option value="240" />
+            </datalist>
+            <label for="interval">Repetition Interval</label>
+            <select id="interval" name="interval">
+              <option value="0" lquery="(attr :selected (= 0 interval))">Once</option>
+              <option value="1" lquery="(attr :selected (= 1 interval))">Daily</option>
+              <option value="2" lquery="(attr :selected (= 2 interval))">Weekly</option>
+              <option value="3" lquery="(attr :selected (= 3 interval))">Monthly</option>
+              <option value="4" lquery="(attr :selected (= 4 interval))">Yearly</option>
+            </select>
+            <label for="description">Description</label>
+            <textarea id="description" maxlength="2000" placeholder="About the event..." lquery="(text description)"></textarea>
+            <input type="hidden" name="browser" value="true" />
+            <div id="buttons">
+              <c:if test="(dm:hull-p *)">
+                <c:else>
+                  <input type="hidden" name="id" lquery="(val _id)" />
+                  <c:when test="(events::permitted-p :delete *)">
+                    <input type="submit" @formaction="/api/events/delete" value="Delete" />
+                  </c:when>
+                  <c:when test="(events::permitted-p :edit *)">
+                    <input type="submit" @formaction="/api/events/edit" value="Save" />
+                  </c:when>
+                </c:else>
+                <c:then>
+                  <input type="submit" @formaction="/api/events/create" value="Post" />
+                </c:then>
+              </c:if>
+            </div>
+          </div>
+        </form>
+      </c:using>
+    </main>
+    <script type="text/javascript" src="../static/events.js" @src="/static/events/events.js"></script>
+  </body>
+</html>

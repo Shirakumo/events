@@ -1,0 +1,136 @@
+(:let ()
+  (a :text-decoration none)
+  
+  (body
+   :margin 0
+   :font-family "sans-serif"
+   :font-size 16pt
+   :background (hex 151515)
+   :color (hex eeeeee)
+
+   (header
+    :background (hex 222222)
+    :position absolute
+    :left 0 :top 10px
+    (h1
+     :font-size 1.2em
+     :text-align center
+     :margin 5px)
+    (nav
+     :min-width 100px
+     :display flex
+     :flex-direction column
+     (a
+      :color (hex ffffff)
+      :font-weight bold
+      :padding 5px 10px 5px 5px
+      :margin 1px 0 0 0
+      :white-space nowrap)
+     ((:and a :hover)
+      :background (hex 888888))))
+
+   (main
+    :flex-grow 1
+    :padding 20px 0 0 0)
+
+   ((:and .timezone :before) :content "(")
+   ((:and .timezone :after) :content ")")
+
+   (.infobox
+    :display none
+    :background (hex 555555)
+    :padding 10px
+    :margin 10px
+    :text-align center
+    :font-weight bold)
+   (.infobox.error
+    :background (hex ee0000))
+   (.infobox.message
+    :background (hex 558855))
+
+   ("#editor"
+    ((:or input textarea select)
+     :border none
+     :box-sizing border-box
+     :display inline-block
+     :background (hex 333333)
+     :color (hex ffffff)
+     :padding 5px
+     :font-size inherit)
+    ((:and input[type=submit] :hover)
+     :background (hex 888888)
+     :cursor pointer)
+    
+    ("#title"
+     :font-size 2em
+     :padding 10px
+     :text-align center
+     :width 100%)
+    ("#inputs"
+     :max-width 1024px
+     :margin 0 auto 0 auto
+     :padding 10px
+     :display flex
+     :flex-wrap wrap
+     (>* :width 50%
+         :margin 5px 0 5px 0)
+     (textarea
+      :width 100%
+      :min-height 200px)
+     ("#buttons"
+      :width 100%)
+     ((:or "input[value=Save]" "input[value=Post]")
+      :float right)
+     ("input[value=Delete]"
+      :background (hex 550000))
+     ("input[value=Delete]:hover"
+      :background (hex aa0000))))
+
+   (.event
+    :margin 10px auto 10px auto
+    (.summary
+     (.title
+      :font-size 2em
+      :color (hex ffffff)
+      :background (hex 333333)
+      :margin 0 0 10px 0
+      :padding 10px
+      :text-align center
+      (a :color inherit)
+      ((:and a :hover) :color (hex ee8800)))
+     (.duration.author
+      :color (hex aaaaaa))
+     (.duration
+      :vertical-align middle
+      :text-align center
+      (time :display inline-block
+            :width 150px)))
+    (.detail
+     :max-width 1024px
+     :margin 50px auto 0 auto
+     :padding 10px
+     :white-space nobreak
+     (a :color inherit)
+     ((:and a :hover) :color (hex ee8800))
+     (.bar
+      :display flex
+      :justify-content space-between
+      (.meta
+       :text-align right))
+     (.description
+      (a :color (hex ee8800))
+      ((:and a :hover) :color (hex ffcc00))))))
+
+  (:media "(max-width: 800px)"
+          (body
+           :font-size 14pt
+           (header
+            :position relative
+            :top 0 :left 0
+            :font-size 1.2em
+            (nav :text-align center))
+           (.event
+            (.detail
+             (.bar
+              :justify-content center
+              (nav :display none)))))))
