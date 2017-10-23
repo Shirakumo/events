@@ -62,7 +62,7 @@
   (db:with-transaction ()
     (dm:delete (ensure-event event))))
 
-(defun edit-event (event &key title location start description duration interval)
+(defun edit-event (event &key title location start description duration interval link)
   (db:with-transaction ()
     (let ((event (ensure-event event)))
       (when title
@@ -71,6 +71,8 @@
         (setf (dm:field event "location") location))
       (when start
         (setf (dm:field event "start") start))
+      (when link
+        (setf (dm:field event "link") link))
       (when description
         (setf (dm:field event "description") description))
       (when duration
@@ -83,9 +85,28 @@
   (make-url :domains '("events")
             :path (princ-to-string (dm:id (ensure-event event)))))
 
+(defun parse-iso-stamp (stamp)
+  (cl-ppcre:register-groups-bind (y m d hh mm ss) ("(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2})(:(\\d{2}))?Z?" stamp)
+    (encode-universal-time (if ss (parse-integer ss) 0)
+                           (parse-integer mm)
+                           (parse-integer hh)
+                           (parse-integer d)
+                           (parse-integer m)
+                           (parse-integer y)
+                           0)))
+
+(defun iso-stamp (stamp)
+  (multiple-value-bind (ss mm hh d m y)
+      (decode-universal-time stamp 0)
+    (format NIL "~4,'0d-~2,'0d-~2,'0dT~2,'0d:~2,'0d:~2,'0d"
+            y m d hh mm ss)))
+
 (defun event-start-stamp (event)
-  ;;FIXME
-  )
+  (let* ((event (ensure-event event))
+         (offset (timezone-offset (dm:field event "location"))))
+    (values (- (parse-iso-stamp (dm:field event "start"))
+               offset)
+            offset)))
 
 (defun permitted-p (action &optional event (user (or (auth:current) (user:get "anonymous"))))
   (if (listp action)
@@ -99,3 +120,25 @@
   (unless (permitted-p action event user)
     (error 'request-denied :message (format NIL "You do not have the permission to ~a events."
                                             action))))
+
+(defun interval->label (interval)
+  (case interval
+    (0 "Once")
+    (1 "Daily")
+    (2 "Weekly")
+    (3 "Monthly")
+    (4 "Yearly")
+    (T "???")))
+
+(defun apply-interval (stamp interval)
+  (let ((stamp (local-time:universal-to-timestamp stamp)))
+    (ecase interval
+      (0 (local-time:timestamp-to-universal stamp))
+      (1 (local-time:timestamp-to-universal
+          (local-time:timestamp+ stamp 1 :day local-time:+utc-zone+)))
+      (2 (local-time:timestamp-to-universal
+          (local-time:timestamp+ stamp 7 :day local-time:+utc-zone+)))
+      (3 (local-time:timestamp-to-universal
+          (local-time:timestamp+ stamp 1 :month local-time:+utc-zone+)))
+      (4 (local-time:timestamp-to-universal
+          (local-time:timestamp+ stamp 1 :year local-time:+utc-zone+))))))

@@ -37,7 +37,6 @@
    ((:and .timezone :after) :content ")")
 
    (.infobox
-    :display none
     :background (hex 555555)
     :padding 10px
     :margin 10px
@@ -101,10 +100,13 @@
      (.duration.author
       :color (hex aaaaaa))
      (.duration
-      :vertical-align middle
+      :display flex
+      :align-items center
+      :justify-content center
       :text-align center
       (time :display inline-block
-            :width 150px)))
+            :width 150px)
+      (.timezone :width 0px)))
     (.detail
      :max-width 1024px
      :margin 50px auto 0 auto

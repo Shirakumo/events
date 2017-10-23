@@ -9,10 +9,12 @@
   <body>
     <header>
       <nav>
-        <a href="#" @href="events/">
-          <i class="fa fa-plus-square fa-fw"></i>
-          Create Event
-        </a>
+        <c:when test="(events::permitted-p :new)">
+          <a href="#" @href="events/">
+            <i class="fa fa-plus-square fa-fw"></i>
+            Create Event
+          </a>
+        </c:when>
       </nav>
     </header>
     <main>
@@ -50,22 +52,22 @@
               <option value="4" lquery="(attr :selected (= 4 interval))">Yearly</option>
             </select>
             <label for="description">Description</label>
-            <textarea id="description" maxlength="2000" placeholder="About the event..." lquery="(text description)"></textarea>
+            <textarea id="description" name="description" maxlength="2000" placeholder="About the event..." lquery="(text description)"></textarea>
             <input type="hidden" name="browser" value="true" />
             <div id="buttons">
               <c:if test="(dm:hull-p *)">
-                <c:else>
-                  <input type="hidden" name="id" lquery="(val _id)" />
-                  <c:when test="(events::permitted-p :delete *)">
-                    <input type="submit" @formaction="/api/events/delete" value="Delete" />
-                  </c:when>
-                  <c:when test="(events::permitted-p :edit *)">
-                    <input type="submit" @formaction="/api/events/edit" value="Save" />
-                  </c:when>
-                </c:else>
                 <c:then>
                   <input type="submit" @formaction="/api/events/create" value="Post" />
                 </c:then>
+                <c:else>
+                  <input type="hidden" name="id" lquery="(val _id)" />
+                  <c:when test="(events::permitted-p :edit *)">
+                    <input type="submit" @formaction="/api/events/edit" value="Save" />
+                  </c:when>
+                  <c:when test="(events::permitted-p :delete *)">
+                    <input type="submit" @formaction="/api/events/delete" value="Delete" />
+                  </c:when>
+                </c:else>
               </c:if>
             </div>
           </div>

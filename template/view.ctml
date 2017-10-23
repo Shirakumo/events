@@ -9,10 +9,12 @@
   <body>
     <header>
       <nav>
-        <a href="#" @href="events/">
-          <i class="fa fa-plus-square fa-fw"></i>
-          Create Event
-        </a>
+        <c:when test="(events::permitted-p :new)">
+          <a href="#" @href="events/">
+            <i class="fa fa-plus-square fa-fw"></i>
+            Create Event
+          </a>
+        </c:when>
       </nav>
     </header>
     <main>
@@ -28,19 +30,21 @@
             <h2 class="title"><a href="#" lquery="(text title) (attr :href link)">Something is happening I guess</a></h2>
             <div class="duration author">
               <i class="fa fa-globe fa-fw"></i>
-              <!-- <time class="author start" lquery="(time start)">Thursday 20:00</time>
-                 -
-                   <time class="author end" lquery="(time end)">Thursday 22:00</time> -->
-              <span class="timezone" lquery="(text timezone)" >CEST</span>
+              <time class="author start" lquery="(time begin)">Thursday 20:00</time>
+              -
+              <time class="author end" lquery="(time end)">Thursday 22:00</time>
+              <span class="timezone" >UTC</span>
             </div>
           </section>
           <section class="detail">
             <div class="bar">
               <nav>
-                <a href="#" @href="events/{0}/edit _id">
-                  <i class="fa fa-pencil-square fa-fw"></i>
-                  Edit This
-                </a>
+                <c:when test="(events::permitted-p '(:edit :delete) *)">
+                  <a href="#" @href="events/{0}/edit _id">
+                    <i class="fa fa-pencil-square fa-fw"></i>
+                    Edit This
+                  </a>
+                </c:when>
                 <a href="#" @href="events/{0}/ical _id">
                   <i class="fa fa-share-square fa-fw"></i>
                   Export iCal
@@ -62,5 +66,6 @@
         </article>
       </c:using>
     </main>
+    <script type="text/javascript" src="../static/events.js" @src="/static/events/events.js"></script>
   </body>
 </html>

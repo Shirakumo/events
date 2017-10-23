@@ -19,5 +19,8 @@
                (:interface :cache)
                :drakma
                :yason
+               :cl-ppcre
                :r-data-model
-               :r-clip))
+               :r-clip
+               :markdown.cl
+               :local-time))

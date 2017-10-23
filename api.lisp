@@ -17,21 +17,29 @@
     (check-permission 'view event)
     (api-output event)))
 
-(define-api events/create (title location start &optional description duration interval) ()
+(define-api events/create (title location start &optional description duration interval link) ()
   (check-permission 'new)
+  (when (< (parse-iso-stamp start) (- (get-universal-time)
+                                      (* 60 60 12)))
+    (error "The start date must be in the future."))
   (let ((event (create-event title location start
+                             :link link
                              :author (auth:current)
                              :description description
                              :duration (when duration (parse-integer duration))
                              :interval (when interval (parse-integer interval)))))
     (api-event-output event)))
 
-(define-api events/edit (id &optional title location start description duration interval) ()
+(define-api events/edit (id &optional title location start description duration interval link) ()
   (let ((event (ensure-event id)))
     (check-permission 'edit event)
+    (when (and start (< (parse-iso-stamp start) (- (get-universal-time)
+                                                   (* 60 60 12))))
+      (error "The start date must be in the future."))
     (edit-event event :title title
                       :location location
                       :start start
+                      :link link
                       :description description
                       :duration (when duration (parse-integer duration))
                       :interval (when interval (parse-integer interval)))
