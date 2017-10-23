@@ -28,7 +28,7 @@
     (setf (content-type *response*) "text/calendar")
     (setf (header "Content-Disposition")
           (format NIL "attachment; filename=~s" (format NIL "~a.ics" (dm:field event "title"))))
-    (dm:with-model-fields event (_id time author duration description)
+    (dm:with-model-fields event (_id time author duration description interval)
       (let ((start (event-start-stamp event)))
         (format NIL "~
 BEGIN:VCALENDAR
@@ -39,9 +39,11 @@ UID:~a
 DTSTAMP:~a
 ORGANIZER:~a
 DTSTART:~a
-DTEND:~a
+DTEND:~a~@[
+RRULE:FREQ=~a~]
 SUMMARY:~a
 END:VEVENT
 END:VCALENDAR"
                 _id (ical-time time) author (ical-time start) (ical-time (+ start duration))
+                (case interval (1 "DAILY") (2 "WEEKLY") (3 "MONTHLY") (4 "YEARLY") (T NIL))
                 (ical-description description))))))

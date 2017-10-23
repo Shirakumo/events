@@ -128,7 +128,7 @@
     (2 "Weekly")
     (3 "Monthly")
     (4 "Yearly")
-    (T "???")))
+    (T NIL)))
 
 (defun apply-interval (stamp interval)
   (let ((stamp (local-time:universal-to-timestamp stamp)))
