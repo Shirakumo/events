@@ -120,6 +120,13 @@
       (.meta
        :text-align right))
      (.description
+      (blockquote
+       :border-left 3px solid (hex 333333)
+       :margin 0 :padding-left 15px)
+      (code :background (hex 333333)
+            :padding 2px
+            :border-radius 2px)
+      ((pre code) :display block)
       (a :color (hex ee8800))
       ((:and a :hover) :color (hex ffcc00))))))
 
