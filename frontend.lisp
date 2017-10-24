@@ -6,15 +6,6 @@
 
 (in-package #:org.shirakumo.radiance.events)
 
-(defun maybe-update-event (event start offset)
-  (when (and (< start (get-universal-time))
-             (< 0 (dm:field event "interval")))
-    (loop while (< start (get-universal-time))
-          do (setf start (apply-interval start (dm:field event "interval"))))
-    (v:info :test "~a ~a" start (iso-stamp (+ start offset)))
-    (setf (dm:field event "start") (iso-stamp (+ start offset)))
-    (dm:save event)))
-
 (define-page create "events/" (:clip "edit.ctml")
   (let ((event (dm:hull 'events)))
     (check-permission 'new)
@@ -27,15 +18,10 @@
 (define-page view "events/([^/]+)" (:uri-groups (id) :clip "view.ctml")
   (let ((event (ensure-event id)))
     (check-permission 'view event)
-    (multiple-value-bind (start offset) (event-start-stamp event)
-      (maybe-update-event event start offset)
-      (setf (dm:field event "begin") start)
-      (setf (dm:field event "end") (+ start (* 60 (dm:field event "duration"))))
-      (setf (dm:field event "repeat") (interval->label (dm:field event "interval")))
-      (setf (dm:field event "description") (markdown.cl:parse (dm:field event "description")))
-      (r-clip:process T :event event
-                        :error (get-var "error")
-                        :message (get-var "message")))))
+    (maybe-update-event-start event)
+    (r-clip:process T :event event
+                      :error (get-var "error")
+                      :message (get-var "message"))))
 
 (define-page edit "events/([^/]+)/edit" (:uri-groups (id) :clip "edit.ctml")
   (let ((event (ensure-event id)))

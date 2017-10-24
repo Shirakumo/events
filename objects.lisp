@@ -6,6 +6,10 @@
 
 (in-package #:org.shirakumo.radiance.events)
 
+(define-hook event-updated (event))
+(define-hook event-created (event))
+(define-hook event-deleted (event))
+
 (define-trigger db:connected ()
   (db:create 'events '((title (:varchar 32))
                        (time (:integer 5))
@@ -14,6 +18,7 @@
                        (description :text)
                        (location (:varchar 32))
                        (start (:varchar 16))
+                       (start-stamp (:integer 5))
                        (duration :integer)
                        (interval :integer))))
 
@@ -42,11 +47,11 @@
                  (error 'request-not-found :message (format NIL "No event with ID ~a was found." event-ish))))))
 
 (defun create-event (title location start &key author link description duration interval)
-  (db:with-transaction ()
-    (let ((event (dm:hull 'events))
-          (author (etypecase author
-                    (string author)
-                    (user:user (user:username author)))))
+  (let ((event (dm:hull 'events))
+        (author (etypecase author
+                  (string author)
+                  (user:user (user:username author)))))
+    (db:with-transaction ()
       (setf (dm:field event "title") title
             (dm:field event "time") (get-universal-time)
             (dm:field event "author") author
@@ -54,23 +59,31 @@
             (dm:field event "description") (or description "")
             (dm:field event "location") location
             (dm:field event "start") start
+            (dm:field event "start-stamp") (event-start-stamp event)
             (dm:field event "duration") (or duration (* 60 60))
             (dm:field event "interval") (or interval 0))
-      (dm:insert event))))
+      (dm:insert event))
+    (trigger 'event-created event)
+    event))
 
 (defun delete-event (event)
-  (db:with-transaction ()
-    (dm:delete (ensure-event event))))
+  (let ((event (ensure-event event)))
+    (db:with-transaction ()
+      (dm:delete event))
+    (trigger 'event-deleted event)
+    event))
 
 (defun edit-event (event &key title location start description duration interval link)
-  (db:with-transaction ()
-    (let ((event (ensure-event event)))
+  (let ((event (ensure-event event)))
+    (db:with-transaction ()
       (when title
         (setf (dm:field event "title") title))
       (when location
         (setf (dm:field event "location") location))
       (when start
         (setf (dm:field event "start") start))
+      (when (or location start)
+        (setf (dm:field event "start-stamp") (event-start-stamp event)))
       (when link
         (setf (dm:field event "link") link))
       (when description
@@ -79,7 +92,9 @@
         (setf (dm:field event "duration") duration))
       (when interval
         (setf (dm:field event "interval") interval))
-      (dm:save event))))
+      (dm:save event))
+    (trigger 'event-updated event)
+    event))
 
 (defun event-url (event)
   (make-url :domains '("events")
@@ -142,3 +157,21 @@
           (local-time:timestamp+ stamp 1 :month local-time:+utc-zone+)))
       (4 (local-time:timestamp-to-universal
           (local-time:timestamp+ stamp 1 :year local-time:+utc-zone+))))))
+
+(defun maybe-update-event-start (event)
+  (let ((event (ensure-event event)))
+    (when (event-out-of-date-p event)
+      (multiple-value-bind (start offset) (event-start-stamp event)
+        (loop while (< start (get-universal-time))
+              do (setf start (apply-interval start (dm:field event "interval"))))
+        (db:with-transaction ()
+          (setf (dm:field event "start") (iso-stamp (+ start offset)))
+          (setf (dm:field event "start-stamp") start)
+          (dm:save event))
+        (trigger 'event-updated event)))
+    event))
+
+(defun event-out-of-date-p (event)
+  (let ((event (ensure-event event)))
+    (and (< (dm:field event "start-stamp") (get-universal-time))
+         (< 0 (dm:field event "interval")))))

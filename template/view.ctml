@@ -30,9 +30,9 @@
             <h2 class="title"><a href="#" lquery="(text title) (attr :href link)">Something is happening I guess</a></h2>
             <div class="duration author">
               <i class="fa fa-globe fa-fw"></i>
-              <time class="author start" lquery="(time begin)">Thursday 20:00</time>
+              <time class="author start" lquery="(time start-stamp)">Thursday 20:00</time>
               -
-              <time class="author end" lquery="(time end)">Thursday 22:00</time>
+              <time class="author end" lquery="(time (+ start-stamp (* 60 duration)))">Thursday 22:00</time>
               <span class="timezone" >UTC</span>
             </div>
           </section>
@@ -52,14 +52,14 @@
               </nav>
               <div class="meta">
                 <i class="fa fa-repeat fa-fw"></i>
-                <span class="repeat" lquery="(text repeat)">Weekly</span>
+                <span class="repeat" lquery="(text (events::interval->label interval))">Weekly</span>
                 <i class="fa fa-user fa-fw"></i>
                 <span class="author" lquery="(text author)">Some Asshole</span>
                 <i class="fa fa-clock-o fa-fw"></i>
                 <time class="created" lquery="(time time)">2017.10.20</time>
               </div>
             </div>
-            <div class="description" lquery="(html description)">
+            <div class="description" lquery="(html (markdown.cl:parse description))">
               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc non enim dui. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Proin magna velit, sollicitudin vel varius a, convallis a metus. Integer consectetur, est id <a href="#">accumsan</a> tincidunt, metus nisl facilisis felis, id tempus dolor felis non nisl. Nullam sed sem nec risus tempus accumsan. Curabitur convallis massa vel eleifend finibus. Ut a pellentesque tortor. Integer pulvinar ornare suscipit. Interdum et malesuada fames ac ante ipsum primis in faucibus. Praesent posuere eros nec ex volutpat, mollis mollis erat congue.</p>
             </div>
           </section>

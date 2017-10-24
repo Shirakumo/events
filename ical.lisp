@@ -22,15 +22,9 @@
                 (format out "~% "))
                (T (write-char c out))))))
 
-(define-page ical "events/([^/]+)/ical" (:uri-groups (id))
-  (let ((event (ensure-event id)))
-    (check-permission 'view event)
-    (setf (content-type *response*) "text/calendar")
-    (setf (header "Content-Disposition")
-          (format NIL "attachment; filename=~s" (format NIL "~a.ics" (dm:field event "title"))))
-    (dm:with-model-fields event (_id time author duration description interval)
-      (let ((start (event-start-stamp event)))
-        (format NIL "~
+(Defun render-ical (event)
+  (dm:with-model-fields event (_id time author duration description interval start-stamp)
+    (format NIL "~
 BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//hacksw/handcal//NONSGML v1.0//EN
@@ -44,6 +38,15 @@ RRULE:FREQ=~a~]
 SUMMARY:~a
 END:VEVENT
 END:VCALENDAR"
-                _id (ical-time time) author (ical-time start) (ical-time (+ start duration))
-                (case interval (1 "DAILY") (2 "WEEKLY") (3 "MONTHLY") (4 "YEARLY") (T NIL))
-                (ical-description description))))))
+            _id (ical-time time) author (ical-time start-stamp) (ical-time (+ start-stamp (* 60 duration)))
+            (case interval (1 "DAILY") (2 "WEEKLY") (3 "MONTHLY") (4 "YEARLY") (T NIL))
+            (ical-description description))))
+
+(define-page ical "events/([^/]+)/ical" (:uri-groups (id))
+  (let ((event (ensure-event id)))
+    (check-permission 'view event)
+    (setf (content-type *response*) "text/calendar")
+    (setf (header "Content-Disposition")
+          (format NIL "attachment; filename=~s" (format NIL "~a.ics" (dm:field event "title"))))
+    (maybe-update-event-start event)
+    (render-ical event)))
