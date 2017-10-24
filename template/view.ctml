@@ -59,7 +59,7 @@
                 <time class="created" lquery="(time time)">2017.10.20</time>
               </div>
             </div>
-            <div class="description" lquery="(html (markdown.cl:parse description))">
+            <div class="description" lquery="(html (events::rendered-event-description *))">
               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc non enim dui. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Proin magna velit, sollicitudin vel varius a, convallis a metus. Integer consectetur, est id <a href="#">accumsan</a> tincidunt, metus nisl facilisis felis, id tempus dolor felis non nisl. Nullam sed sem nec risus tempus accumsan. Curabitur convallis massa vel eleifend finibus. Ut a pellentesque tortor. Integer pulvinar ornare suscipit. Interdum et malesuada fames ac ante ipsum primis in faucibus. Praesent posuere eros nec ex volutpat, mollis mollis erat congue.</p>
             </div>
           </section>

@@ -23,4 +23,5 @@
                :r-data-model
                :r-clip
                :markdown.cl
-               :local-time))
+               :local-time
+               :babel))

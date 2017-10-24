@@ -101,7 +101,7 @@
             :path (princ-to-string (dm:id (ensure-event event)))))
 
 (defun parse-iso-stamp (stamp)
-  (cl-ppcre:register-groups-bind (y m d hh mm ss) ("(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2})(:(\\d{2}))?Z?" stamp)
+  (cl-ppcre:register-groups-bind (y m d hh mm NIL ss) ("(\\d{4})-(\\d{2})-(\\d{2})T(\\d{2}):(\\d{2})(:(\\d{2}))?Z?" stamp)
     (encode-universal-time (if ss (parse-integer ss) 0)
                            (parse-integer mm)
                            (parse-integer hh)
@@ -175,3 +175,18 @@
   (let ((event (ensure-event event)))
     (and (< (dm:field event "start-stamp") (get-universal-time))
          (< 0 (dm:field event "interval")))))
+
+(defun rendered-event-description (event)
+  (let ((value (cache:with-cache (event-description (dm:id event)) NIL
+                 (v:info :Test "~a" event)
+                 (markdown.cl:parse (dm:field event "description")))))
+    (typecase value
+      (string value)
+      (vector (babel:octets-to-string value))
+      (plump:node value))))
+
+(define-trigger (event-updated renew-description) (event)
+  (cache:renew 'event-description (dm:id event)))
+
+(define-trigger (event-deleted delete-description) (event)
+  (cache:renew 'event-description (dm:id event)))
