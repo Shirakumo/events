@@ -22,6 +22,6 @@
                :cl-ppcre
                :r-data-model
                :r-clip
-               :markdown.cl
+               :3bmd
                :local-time
                :babel))

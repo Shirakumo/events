@@ -120,6 +120,7 @@
       (.meta
        :text-align right))
      (.description
+      (h1 :font-size 1.75em)
       (blockquote
        :border-left 3px solid (hex 333333)
        :margin 0 :padding-left 15px)

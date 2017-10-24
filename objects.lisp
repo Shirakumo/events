@@ -178,8 +178,9 @@
 
 (defun rendered-event-description (event)
   (let ((value (cache:with-cache (event-description (dm:id event)) NIL
-                 (v:info :Test "~a" event)
-                 (markdown.cl:parse (dm:field event "description")))))
+                 (with-output-to-string (o)
+                   (3bmd:parse-string-and-print-to-stream
+                    (dm:field event "description") o)))))
     (typecase value
       (string value)
       (vector (babel:octets-to-string value))
