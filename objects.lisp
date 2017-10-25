@@ -118,9 +118,9 @@
 
 (defun event-start-stamp (event)
   (let* ((event (ensure-event event))
-         (offset (timezone-offset (dm:field event "location"))))
-    (values (- (parse-iso-stamp (dm:field event "start"))
-               offset)
+         (start-stamp (parse-iso-stamp (dm:field event "start")))
+         (offset (timezone-offset (dm:field event "location") (universal-to-unix-time start-stamp))))
+    (values (- start-stamp offset)
             offset)))
 
 (defun permitted-p (action &optional event (user (or (auth:current) (user:get "anonymous"))))
