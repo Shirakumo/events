@@ -15,6 +15,12 @@
             Create Event
           </a>
         </c:when>
+        <c:unless test="(auth:current)">
+          <a href="#" @href="<auth page login #>">
+            <i class="fa fa-user fa-fw"></i>
+            Log In
+          </a>
+        </c:unless>
       </nav>
     </header>
     <main>
