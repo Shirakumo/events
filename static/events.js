@@ -27,7 +27,7 @@ var Events = function(){
                 callback(JSON.parse(xhttp.responseText));
             }
         };
-        xhttp.open("GET", "http://ip-api.io/json/", true);
+        xhttp.open("GET", "//ip-api.io/json/", true);
         xhttp.send();
         return xhttp;
     }
