@@ -113,8 +113,9 @@
 (defun iso-stamp (stamp)
   (multiple-value-bind (ss mm hh d m y)
       (decode-universal-time stamp 0)
-    (format NIL "~4,'0d-~2,'0d-~2,'0dT~2,'0d:~2,'0d:~2,'0d"
-            y m d hh mm ss)))
+    (declare (ignore ss))
+    (format NIL "~4,'0d-~2,'0d-~2,'0dT~2,'0d:~2,'0d"
+            y m d hh mm)))
 
 (defun event-start-stamp (event)
   (let* ((event (ensure-event event))
