@@ -6,7 +6,18 @@
 
 (in-package #:org.shirakumo.radiance.events)
 
-(define-page create "events/" (:clip "edit.ctml")
+(define-page list "events/list(?:/([^/]+))?" (:uri-groups (page) :clip "list.ctml")
+  (check-permission 'view)
+  (let* ((page (if page (parse-integer page :junk-allowed T) 0))
+         (events (dm:get 'events (db:query :all) :sort '(("time" :desc))
+                                                 :amount 20
+                                                 :skip (* 20 page))))
+    (mapc #'maybe-update-event-start events)
+    (r-clip:process T :events events
+                      :error (get-var "error")
+                      :message (get-var "message"))))
+
+(define-page create ("events/new" 1) (:clip "edit.ctml")
   (let ((event (dm:hull 'events)))
     (check-permission 'new)
     (setf (dm:field event "duration") 60)

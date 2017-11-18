@@ -67,16 +67,16 @@ var Events = function(){
     }
 
     self.initEvent = function(event){
-        var summary = event.querySelector(".summary");
-        var start = summary.querySelector(".duration.author .start").getAttribute("datetime");
-        var end = summary.querySelector(".duration.author .end").getAttribute("datetime");
+        var durations = event.querySelector(".durations");
+        var start = durations.querySelector(".duration.author .start").getAttribute("datetime");
+        var end = durations.querySelector(".duration.author .end").getAttribute("datetime");
         var div = self.createElement("div", "duration local");
         div.appendChild(self.createElement("i", "fa fa-map-marker fa-fw"));
         div.appendChild(self.createElement("time", "local start", self.formatHumanDate(self.localDate(start))));
         div.appendChild(document.createTextNode(" - "));
         div.appendChild(self.createElement("time", "local end", self.formatHumanDate(self.localDate(end))));
         div.appendChild(self.createElement("span", "timezone", self.localTimeZoneAbbreviation(self.localDate(start))));
-        summary.appendChild(div);
+        durations.appendChild(div);
         return event;
     }
 

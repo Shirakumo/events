@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title><c:splice lquery='(text (clip event :title))'></c:splice> - Events</title>
+    <link rel="stylesheet" type="text/css" href="../static/events.css" @href="/static/events/events.css" />
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  </head>
+  <body>
+    <header>
+      <nav>
+        <c:when test="(events::permitted-p :new)">
+          <a href="#" @href="events/new">
+            <i class="fa fa-plus-square fa-fw"></i>
+            Create Event
+          </a>
+          <a href="#" @href="events/list">
+            <i class="fa fa-list fa-fw"></i>
+            List Events
+          </a>
+        </c:when>
+        <c:unless test="(auth:current)">
+          <a href="#" @href="<auth page login #>">
+            <i class="fa fa-user fa-fw"></i>
+            Log In
+          </a>
+        </c:unless>
+      </nav>
+    </header>
+    <main>
+      <c:when test="error">
+        <div class="infobox error" lquery="(text error)">ERROR</div>
+      </c:when>
+      <c:when test="message">
+        <div class="infobox message" lquery="(text message)">MESSAGE</div>
+      </c:when>
+      <h1>Public Events List</h1>
+      <ul iterate="events" class="event-list">
+        <li class="event" id="1" lquery="(attr :id _id)">
+          <section class="summary">
+            <h2 class="title"><a href="#" @href="events/{0} _id" lquery="(text title)">Something is happening I guess</a></h2>
+            <div class="durations">
+              <div class="duration author">
+                <i class="fa fa-globe fa-fw"></i>
+                <time class="author start" lquery="(time start-stamp)">Thursday 20:00</time>
+                -
+                <time class="author end" lquery="(time (+ start-stamp (* 60 duration)))">Thursday 22:00</time>
+                <span class="timezone" >UTC</span>
+              </div>
+            </div>
+          </section>
+        </li>
+      </ul>
+    </main>
+    <script type="text/javascript" src="../static/events.js" @src="/static/events/events.js"></script>
+  </body>
+</html>

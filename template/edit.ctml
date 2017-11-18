@@ -10,9 +10,13 @@
     <header>
       <nav>
         <c:when test="(events::permitted-p :new)">
-          <a href="#" @href="events/">
+          <a href="#" @href="events/new">
             <i class="fa fa-plus-square fa-fw"></i>
             Create Event
+          </a>
+          <a href="#" @href="events/list">
+            <i class="fa fa-list fa-fw"></i>
+            List Events
           </a>
         </c:when>
       </nav>
