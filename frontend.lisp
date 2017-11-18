@@ -6,7 +6,7 @@
 
 (in-package #:org.shirakumo.radiance.events)
 
-(define-page list "events/list(?:/([^/]+))?" (:uri-groups (page) :clip "list.ctml")
+(define-page list "events/^$|(?:list(?:/([^/]+))?)" (:uri-groups (page) :clip "list.ctml")
   (check-permission 'view)
   (let* ((page (if page (parse-integer page :junk-allowed T) 0))
          (events (dm:get 'events (db:query :all) :sort '(("time" :desc))
