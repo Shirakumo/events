@@ -5,6 +5,7 @@
     <title><c:splice lquery='(text (clip event :title))'></c:splice> - Events</title>
     <link rel="stylesheet" type="text/css" href="../static/events.css" @href="/static/events/events.css" />
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="static" @href="/static/events/" />
   </head>
   <body>
     <header>
@@ -35,9 +36,13 @@
         <div class="infobox message" lquery="(text message)">MESSAGE</div>
       </c:when>
       <c:using value="event">
+        
         <article class="event" id="1" lquery='(attr :id _id) (add-class (when (= 1 cancelled) "cancelled"))'>
           <section class="summary">
-            <h2 class="title"><a href="#" lquery="(text title) (attr :href link)">Something is happening I guess</a></h2>
+            <h2 class="title">
+              <img class="flavor" @src="/static/events/flavor/{0} flavor" alt="" />
+              <a href="#" lquery="(text title) (attr :href link)">Something is happening I guess</a>
+            </h2>
             <div class="durations">
               <div class="duration author">
                 <i class="fa fa-globe fa-fw"></i>

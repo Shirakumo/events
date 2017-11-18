@@ -12,6 +12,7 @@
     :background (hex 222222)
     :position absolute
     :left 0 :top 10px
+    :z-index 1000
     (h1
      :font-size 1.2em
      :text-align center
@@ -95,6 +96,7 @@
       :display flex
       :background (hex 333333)
       (.title
+       :height 50px
        :font-size 1.5em
        :margin 0 5px 0 0
        :width 50%)
@@ -113,13 +115,28 @@
     :margin 10px auto 10px auto
     (.summary
      (.title
+      :display flex
+      :justify-content center
+      :align-items center
+      :overflow hidden
+      :position relative
       :font-size 2em
       :color (hex ffffff)
-      :background (hex 333333)
       :margin 0 0 10px 0
       :padding 10px
-      :text-align center
-      (a :color inherit)
+      :height 200px
+      (.flavor
+       :position absolute
+       :left -10px :top -10px
+       :width "calc(100% + 20px)"
+       :height "calc(100% + 20px)"
+       :object-fit cover
+       :z-index -1
+       :filter (blur 10px)
+       :background (hex 333333))
+      (a :color inherit
+         :z-index 10
+         :display block)
       ((:and a :hover) :color (hex ee8800)))
      (.duration.author
       :color (hex aaaaaa))

@@ -24,4 +24,5 @@
                :r-clip
                :3bmd
                :local-time
-               :babel))
+               :babel
+               :trivial-mimes))

@@ -15,6 +15,7 @@
                        (time (:integer 5))
                        (author (:varchar 32))
                        (link (:varchar 64))
+                       (flavor (:varchar 64))
                        (description :text)
                        (location (:varchar 32))
                        (start (:varchar 16))
@@ -24,6 +25,8 @@
                        (cancelled (:integer 1)))))
 
 (define-trigger user:ready ()
+  (defaulted-config 2 :file :size-limit)
+  
   (defaulted-config (list
                      (perm events new)
                      (perm events view)
@@ -47,7 +50,7 @@
     (integer (or (dm:get-one 'events (db:query (:= '_id event-ish)))
                  (error 'request-not-found :message (format NIL "No event with ID ~a was found." event-ish))))))
 
-(defun create-event (title location start &key author link description duration interval)
+(defun create-event (title location start &key author link description duration interval flavor)
   (let ((event (dm:hull 'events))
         (author (etypecase author
                   (string author)
@@ -57,6 +60,7 @@
             (dm:field event "time") (get-universal-time)
             (dm:field event "author") author
             (dm:field event "link") (or link "")
+            (dm:field event "flavor") (or flavor "")
             (dm:field event "description") (or description "")
             (dm:field event "location") location
             (dm:field event "start") start
@@ -75,7 +79,7 @@
     (trigger 'event-deleted event)
     event))
 
-(defun edit-event (event &key title location start description duration interval link (cancelled NIL cancelled-p))
+(defun edit-event (event &key title location start description duration interval link flavor (cancelled NIL cancelled-p))
   (let ((event (ensure-event event)))
     (db:with-transaction ()
       (when title
@@ -88,6 +92,8 @@
         (setf (dm:field event "start-stamp") (event-start-stamp event)))
       (when link
         (setf (dm:field event "link") link))
+      (when flavor
+        (setf (dm:field event "flavor") flavor))
       (when description
         (setf (dm:field event "description") description))
       (when duration

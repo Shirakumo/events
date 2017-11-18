@@ -29,11 +29,13 @@
         <div class="infobox message" lquery="(text message)">MESSAGE</div>
       </c:when>
       <c:using value="event">
-        <form method="post" id="editor">
+        <form method="post" id="editor" enctype="multipart/form-data">
           <input id="title" name="title" maxlength="32" placeholder="Event Title" required autofocus lquery="(val title)" />
           <div id="inputs">
             <label for="link">Link</label>
             <input type="url" id="link" name="link" maxlength="64" placeholder="http://..." lquery="(val link)" />
+            <label for="flavor">Flavor Image</label>
+            <input type="file" id="flavor" name="flavor" lquery="(val flavor)" />
             <label for="location">Local Time Region</label>
             <input id="location" name="location" maxlength="32" placeholder="London" required lquery="(val location)" />
             <label for="start">Starting Date</label>

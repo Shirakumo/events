@@ -40,3 +40,7 @@
     (r-clip:process T :event event
                       :error (get-var "error")
                       :message (get-var "message"))))
+
+(define-page flavor ("/static/events/flavor/(.+)" 1001) (:uri-groups (flavor))
+  (setf (header "Cache-Control") "public, max-age=31536000")
+  (serve-file (merge-pathnames flavor *flavor-dir*)))

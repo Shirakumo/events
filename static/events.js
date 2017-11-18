@@ -66,7 +66,7 @@ var Events = function(){
         return new Date(Date.parse(date+"Z"));
     }
 
-    self.initEvent = function(event){
+    self.addLocalDate = function(event){
         var durations = event.querySelector(".durations");
         var start = durations.querySelector(".duration.author .start").getAttribute("datetime");
         var end = durations.querySelector(".duration.author .end").getAttribute("datetime");
@@ -78,6 +78,10 @@ var Events = function(){
         div.appendChild(self.createElement("span", "timezone", self.localTimeZoneAbbreviation(self.localDate(start))));
         durations.appendChild(div);
         return event;
+    }
+
+    self.initEvent = function(event){
+        self.addLocalDate(event);
     }
 
     self.init = function(){    
