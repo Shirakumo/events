@@ -35,6 +35,14 @@
     :padding 20px 0 0 0
     (h1 :text-align center))
 
+   (footer
+    :margin 50px 0 0 0
+    :text-align center
+    :font-size 0.75em
+    :color (hex 555555)
+    (a :color (hex 005588))
+    ((:and a :hover) :color (hex 0088ee)))
+
    ((:and .timezone :before) :content "(")
    ((:and .timezone :after) :content ")")
 

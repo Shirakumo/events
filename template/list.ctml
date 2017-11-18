@@ -52,6 +52,9 @@
         </li>
       </ul>
     </main>
+    <footer>
+      This site is powered by <a href="https://github.com/Shirakumo/events">Events</a>.
+    </footer>
     <script type="text/javascript" src="../static/events.js" @src="/static/events/events.js"></script>
   </body>
 </html>
