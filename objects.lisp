@@ -20,7 +20,8 @@
                        (start (:varchar 16))
                        (start-stamp (:integer 5))
                        (duration :integer)
-                       (interval :integer))))
+                       (interval :integer)
+                       (cancelled (:integer 1)))))
 
 (define-trigger user:ready ()
   (defaulted-config (list
@@ -61,7 +62,8 @@
             (dm:field event "start") start
             (dm:field event "start-stamp") (event-start-stamp event)
             (dm:field event "duration") (or duration (* 60 60))
-            (dm:field event "interval") (or interval 0))
+            (dm:field event "interval") (or interval 0)
+            (dm:field event "cancelled") 0)
       (dm:insert event))
     (trigger 'event-created event)
     event))
@@ -73,7 +75,7 @@
     (trigger 'event-deleted event)
     event))
 
-(defun edit-event (event &key title location start description duration interval link)
+(defun edit-event (event &key title location start description duration interval link (cancelled NIL cancelled-p))
   (let ((event (ensure-event event)))
     (db:with-transaction ()
       (when title
@@ -92,6 +94,8 @@
         (setf (dm:field event "duration") duration))
       (when interval
         (setf (dm:field event "interval") interval))
+      (when cancelled-p
+        (setf (dm:field event "cancelled") (if cancelled 1 0)))
       (dm:save event))
     (trigger 'event-updated event)
     event))

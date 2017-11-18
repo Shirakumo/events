@@ -35,7 +35,7 @@
         <div class="infobox message" lquery="(text message)">MESSAGE</div>
       </c:when>
       <c:using value="event">
-        <article class="event" id="1" lquery="(attr :id _id)">
+        <article class="event" id="1" lquery='(attr :id _id) (add-class (when (= 1 cancelled) "cancelled"))'>
           <section class="summary">
             <h2 class="title"><a href="#" lquery="(text title) (attr :href link)">Something is happening I guess</a></h2>
             <div class="durations">
@@ -71,6 +71,9 @@
                 <time class="created" lquery="(time time)">2017.10.20</time>
               </div>
             </div>
+            <c:when test="(= 1 cancelled)">
+              <div class="infobox error">The event is cancelled!</div>
+            </c:when>
             <div class="description" lquery="(html (events::rendered-event-description *))">
               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc non enim dui. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Proin magna velit, sollicitudin vel varius a, convallis a metus. Integer consectetur, est id <a href="#">accumsan</a> tincidunt, metus nisl facilisis felis, id tempus dolor felis non nisl. Nullam sed sem nec risus tempus accumsan. Curabitur convallis massa vel eleifend finibus. Ut a pellentesque tortor. Integer pulvinar ornare suscipit. Interdum et malesuada fames ac ante ipsum primis in faucibus. Praesent posuere eros nec ex volutpat, mollis mollis erat congue.</p>
             </div>

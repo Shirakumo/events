@@ -44,7 +44,7 @@
     :text-align center
     :font-weight bold)
    (.infobox.error
-    :background (hex ee0000))
+    :background (hex AA0000))
    (.infobox.message
     :background (hex 558855))
 
@@ -96,13 +96,18 @@
       :background (hex 333333)
       (.title
        :font-size 1.5em
-       :margin 0
+       :margin 0 5px 0 0
        :width 50%)
       (.durations
        :display flex
        :flex-direction column
        :justify-content space-around
        :font-size 0.75em))))
+
+   (.event.cancelled
+    (.summary
+     (.title
+      :background (hex 880000))))
    
    (.event
     :margin 10px auto 10px auto

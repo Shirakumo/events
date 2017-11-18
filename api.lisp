@@ -45,6 +45,12 @@
                       :interval (when interval (parse-integer interval)))
     (api-event-output event)))
 
+(define-api events/cancel (id &optional (cancel-action "cancel")) ()
+  (let ((event (ensure-event id)))
+    (check-permission 'edit event)
+    (edit-event event :cancelled (if (string-equal cancel-action "cancel") T NIL))
+    (api-event-output event)))
+
 (define-api events/delete (id) ()
   (let ((event (ensure-event id)))
     (check-permission 'delete event)

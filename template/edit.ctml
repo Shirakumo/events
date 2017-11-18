@@ -71,6 +71,10 @@
                   <c:when test="(events::permitted-p :delete *)">
                     <input type="submit" @formaction="/api/events/delete" value="Delete" />
                   </c:when>
+                  <c:when test="(events::permitted-p :edit *)">
+                    <input type="hidden" name="cancel-action" lquery='(val (if (= 1 cancelled) "uncancel" "cancel"))'/>
+                    <input type="submit" @formaction="/api/events/cancel" lquery='(val (if (= 1 cancelled) "Uncancel" "Cancel"))' />
+                  </c:when>
                 </c:else>
               </c:if>
             </div>

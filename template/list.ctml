@@ -36,7 +36,7 @@
       </c:when>
       <h1>Public Events List</h1>
       <ul iterate="events" class="event-list">
-        <li class="event" id="1" lquery="(attr :id _id)">
+        <li class="event" id="1" lquery='(attr :id _id) (add-class (when (= 1 cancelled) "cancelled"))'>
           <section class="summary">
             <h2 class="title"><a href="#" @href="events/{0} _id" lquery="(text title)">Something is happening I guess</a></h2>
             <div class="durations">
