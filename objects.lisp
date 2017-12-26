@@ -197,6 +197,16 @@
       (vector (babel:octets-to-string value))
       (plump:node value))))
 
+(defun event-short-description (event)
+  (with-output-to-string (out)
+    (with-input-from-string (in (dm:field event "description"))
+      (loop while (find (peek-char NIL in) #(#\Return #\Linefeed))
+            do (read-char in))
+      (loop repeat 140
+            for c = (read-char in)
+            until (find c #(#\Return #\Linefeed))
+            do (write-char c out)))))
+
 (define-trigger (event-updated renew-description) (event)
   (cache:renew 'event-description (dm:id event)))
 

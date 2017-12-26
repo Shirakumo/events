@@ -1,11 +1,22 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" prefix="og: http://ogp.me/ns#">
   <head>
     <meta charset="utf-8" />
     <title><c:splice lquery='(text (clip event :title))'></c:splice> - Events</title>
     <link rel="stylesheet" type="text/css" href="../static/events.css" @href="/static/events/events.css" />
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link rel="static" @href="/static/events/" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" lquery="(attr :content (clip event :title))" />
+    <meta name="twitter:description" lquery='(attr :content (events::event-short-description event))' />
+    <meta name="twitter:image" lquery='(attr :content (r-clip:resolve-uri "/static/events/flavor/{0}" (clip event :flavor)))' />
+    <meta name="twitter:image:alt" content="Header" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" lquery="(attr :content (clip event :title))" />
+    <meta property="og:description" lquery='(attr :content (events::event-short-description event))' />
+    <meta property="og:image" lquery='(attr :content (r-clip:resolve-uri "/static/events/flavor/{0}" (clip event :flavor)))' />
   </head>
   <body>
     <header>
