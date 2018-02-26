@@ -203,8 +203,8 @@
       (loop while (find (peek-char NIL in) #(#\Return #\Linefeed))
             do (read-char in))
       (loop repeat 140
-            for c = (read-char in)
-            until (find c #(#\Return #\Linefeed))
+            for c = (read-char in NIL)
+            until (or (null c) (find c #(#\Return #\Linefeed)))
             do (write-char c out)))))
 
 (define-trigger (event-updated renew-description) (event)
