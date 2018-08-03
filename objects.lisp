@@ -127,6 +127,16 @@
     (format NIL "~4,'0d-~2,'0d-~2,'0dT~2,'0d:~2,'0d"
             y m d hh mm)))
 
+(defun event-countdown (event)
+  (let* ((remaining (max 0 (- (event-start-stamp event) (get-universal-time))))
+         (seconds   (mod (floor (/ remaining 1)) 60))
+         (minutes   (mod (floor (/ remaining 60)) 60))
+         (hours     (mod (floor (/ remaining 60 60)) 24))
+         (days      (mod (floor (/ remaining 60 60 24)) 365))
+         (years          (floor (/ remaining 60 60 24 365))))
+    (format NIL "~dy ~dd ~d:~2,'0d:~2,'0d"
+            years days hours minutes seconds)))
+
 (defun event-start-stamp (event)
   (let* ((event (ensure-event event))
          (start-stamp (parse-iso-stamp (dm:field event "start")))

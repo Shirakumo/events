@@ -124,6 +124,7 @@
     (.summary
      (.title
       :display flex
+      :flex-direction column
       :justify-content center
       :align-items center
       :overflow hidden
@@ -133,6 +134,8 @@
       :margin 0 0 10px 0
       :padding 10px
       :height 200px
+      :transition 0.5s height
+      :transition-delay 0.5s
       (.flavor
        :position absolute
        :left -10px :top -10px
@@ -142,11 +145,21 @@
        :z-index -1
        :filter (blur 10px)
        :background (hex 333333))
-      (a :color inherit
-         :z-index 10
-         :display block
-         :text-stroke 1px (hex 000))
-      ((:and a :hover) :color (hex ee8800)))
+      ((:or a time)
+       :margin 0.2em
+       :text-align center
+       :color inherit
+       :z-index 10
+       :text-stroke 1px (hex 000))
+      (a
+       :font-size 1.4em)
+      ((:and a :hover)
+       :color (hex ee8800))
+      (time
+       :font-family monospace))
+     ((:and .title :hover)
+      :height 500px
+      (.flavor :filter none))
      (.duration.author
       :color (hex aaaaaa))
      (.duration
@@ -177,11 +190,12 @@
       (code :background (hex 333333)
             :padding 2px
             :border-radius 2px)
-      ((pre code) :display block)
+      (pre
+       (code :display block))
       (a :color (hex ee8800))
       ((:and a :hover) :color (hex ffcc00))))))
 
-  (:media "(max-width: 800px)"
+  (:media (:max-width 800px)
           (body
            :font-size 14pt
            (header

@@ -53,6 +53,7 @@
             <h2 class="title">
               <img class="flavor" @src="/static/events/flavor/{0} flavor" alt="" />
               <a href="#" lquery="(text title) (attr :href link)">Something is happening I guess</a>
+              <time class="countdown" lquery="(text (events::event-countdown *))"></time>
             </h2>
             <div class="durations">
               <div class="duration author">
