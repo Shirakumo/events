@@ -200,7 +200,7 @@
 (defun event-short-description (event)
   (with-output-to-string (out)
     (with-input-from-string (in (dm:field event "description"))
-      (loop while (find (peek-char NIL in) #(#\Return #\Linefeed))
+      (loop while (find (peek-char NIL in NIL) #(#\Return #\Linefeed))
             do (read-char in))
       (loop repeat 140
             for c = (read-char in NIL)
