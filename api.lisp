@@ -15,7 +15,13 @@
   (cond ((string= "true" (post/get "browser"))
          (redirect (event-url event)))
         (T
-         (api-output (dm:fields event)))))
+         (let ((table (dm:fields event)))
+           (setf (dm:field table "description")
+                 (rendered-event-description event))
+           (when (typep (dm:field table "description") 'plump:node)
+             (setf (dm:field table "description")
+                   (plump:serialize (dm:field table "description") NIL)))
+           (api-output table)))))
 
 (defun handle-file (file event)
   (let ((mime (mimes:mime-lookup (second file))))
@@ -37,7 +43,7 @@
 (define-api events/view (id) ()
   (let ((event (ensure-event id)))
     (check-permission 'view event)
-    (api-output event)))
+    (api-output-event event)))
 
 (define-api events/create (title location start &optional description duration interval link flavor) ()
   (check-permission 'new)
