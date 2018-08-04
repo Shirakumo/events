@@ -51,8 +51,6 @@ var Events = function(){
     self.initEditor = function(editor){
         var start = editor.querySelector("#start");
         var location = editor.querySelector("#location");
-
-        start.setAttribute("min", self.formatDateTimeValue(new Date()));
         
         if(start.value === ""){
             start.value = self.formatDateTimeValue(new Date());
