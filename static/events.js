@@ -2,17 +2,19 @@ var Events = function(){
     var self = this;
 
     self.formatCountdown = function(secs){
+        secs = Math.max(0, secs);
         var p = function(a){return(a<10)?"0"+a:a;};
         var s = Math.floor(secs/1) % 60;
         var m = Math.floor(secs/60) % 60;
         var h = Math.floor(secs/(60*60)) % 24;
         var d = Math.floor(secs/(60*60*24)) % 365;
         var y = Math.floor(secs/(60*60*24*365));
-        return y+"y "
-            +d+"d "
-            +h+":"
-            +p(m)+":"
-            +p(s);
+        return ""
+            +((y==0)?"":y+"y ")
+            +((y==0&d==0)?"":d+"d ")
+            +((y==0&d==0&&h==0)?"":h+":")
+            +((y==0&d==0&&h==0&&m==0)?"":p(m)+":")
+            +((y==0&d==0&&h==0&&m==0&&s==0)?"":p(s));
     };
 
     self.formatDateTimeValue = function(date){
@@ -81,7 +83,7 @@ var Events = function(){
     };
 
     self.dateTimeDifference = function(a, b){
-        return Math.abs(a.getTime() - b.getTime()) / 1000;
+        return (a.getTime() - b.getTime()) / 1000;
     };
 
     self.addLocalDate = function(event){
