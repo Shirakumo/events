@@ -201,11 +201,22 @@
     (and (< (dm:field event "start-stamp") (get-universal-time))
          (< 0 (dm:field event "interval")))))
 
+(defun process-hidden-blocks (text &optional remove)
+  (cl-ppcre:regex-replace-all
+   "\\[\\?.*?\\?\\]"
+   text
+   (lambda (text s e ms me rs re)
+     (declare (ignore s e rs re))
+     (if remove
+         ""
+         (subseq text (+ ms 2) (- me 2))))))
+
 (defun rendered-event-description (event)
   (let ((value (cache:with-cache (event-description (dm:id event)) NIL
-                 (with-output-to-string (o)
-                   (3bmd:parse-string-and-print-to-stream
-                    (dm:field event "description") o)))))
+                 (let ((text (dm:field event "description")))
+                   (with-output-to-string (o)
+                     (3bmd:parse-string-and-print-to-stream
+                      (process-hidden-blocks text (< (get-universal-time) (dm:field event "start-stamp"))) o))))))
     (typecase value
       (string value)
       (vector (babel:octets-to-string value))
