@@ -57,7 +57,15 @@
               <option value="3" lquery="(attr :selected (= 3 interval))">Monthly</option>
               <option value="4" lquery="(attr :selected (= 4 interval))">Yearly</option>
             </select>
-            <label for="description">Description</label>
+            <label for="description">Description
+              <input type="checkbox" style="display:none" id="markup" />
+              <label for="markup" class="markup-help-button" title="Click for markup help"><i class="fa fa-question-circle"></i></label>
+              <code class="markup-help"><pre># Header
+*italic*
+**bold**
+[link name](http://example.com)
+[? Hidden until event start time ?]</pre></code>
+            </label>
             <textarea id="description" name="description" maxlength="2000" placeholder="About the event..." lquery="(text description)"></textarea>
             <input type="hidden" name="browser" value="true" />
             <div id="buttons">

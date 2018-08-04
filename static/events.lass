@@ -83,6 +83,14 @@
      :flex-wrap wrap
      (>* :width 50%
          :margin 5px 0 5px 0)
+     (.markup-help-button
+      :color (hex 888888))
+     (.markup-help
+      :display none
+      :margin 0.5em
+      (pre :margin 0))
+     ("#markup:checked ~ .markup-help"
+      :display block)
      (textarea
       :width 100%
       :min-height 200px)
