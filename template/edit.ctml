@@ -5,20 +5,18 @@
     <title><c:splice lquery='(text (or (clip event :title) "New Event"))'></c:splice> - Events</title>
     <link rel="stylesheet" type="text/css" href="../static/events.css" @href="/static/events/events.css" />
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>
   <body>
     <header>
       <nav>
         <c:when test="(events::permitted-p :new)">
-          <a href="#" @href="events/new">
-            <i class="fa fa-plus-square fa-fw"></i>
-            Create Event
-          </a>
-          <a href="#" @href="events/list">
-            <i class="fa fa-list fa-fw"></i>
-            List Events
-          </a>
+          <a href="#" @href="events/new"><i class="fa fa-plus-square fa-fw"></i> Create Event</a>
+          <a href="#" @href="events/list"><i class="fa fa-list fa-fw"></i> Event List</a>
         </c:when>
+        <c:unless test="(auth:current)">
+          <a href="#" @href="<auth page login #>"><i class="fa fa-user fa-fw"></i> Log In</a>
+        </c:unless>
       </nav>
     </header>
     <main>
@@ -51,11 +49,11 @@
             </datalist>
             <label for="interval">Repetition Interval</label>
             <select id="interval" name="interval">
-              <option value="0" lquery="(attr :selected (= 0 interval))">Once</option>
-              <option value="1" lquery="(attr :selected (= 1 interval))">Daily</option>
-              <option value="2" lquery="(attr :selected (= 2 interval))">Weekly</option>
-              <option value="3" lquery="(attr :selected (= 3 interval))">Monthly</option>
-              <option value="4" lquery="(attr :selected (= 4 interval))">Yearly</option>
+              <option lquery="(attr :selected (= 0 interval))" value="0">Once</option>
+              <option lquery="(attr :selected (= 1 interval))" value="1">Daily</option>
+              <option lquery="(attr :selected (= 2 interval))" value="2">Weekly</option>
+              <option lquery="(attr :selected (= 3 interval))" value="3">Monthly</option>
+              <option lquery="(attr :selected (= 4 interval))" value="4">Yearly</option>
             </select>
             <label for="description">Description
               <input type="checkbox" style="display:none" id="markup" />
@@ -78,12 +76,12 @@
                   <c:when test="(events::permitted-p :edit *)">
                     <input type="submit" @formaction="/api/events/edit" value="Save" />
                   </c:when>
+                  <c:when test="(and (events::permitted-p :edit *) (< status 2))">
+                    <input type="hidden" name="cancel-action" lquery='(val (if (= 1 status) "uncancel" "cancel"))'/>
+                    <input type="submit" @formaction="/api/events/cancel" lquery='(val (if (= 1 status) "Uncancel" "Cancel"))' />
+                  </c:when>
                   <c:when test="(events::permitted-p :delete *)">
                     <input type="submit" @formaction="/api/events/delete" value="Delete" />
-                  </c:when>
-                  <c:when test="(events::permitted-p :edit *)">
-                    <input type="hidden" name="cancel-action" lquery='(val (if (= 1 cancelled) "uncancel" "cancel"))'/>
-                    <input type="submit" @formaction="/api/events/cancel" lquery='(val (if (= 1 cancelled) "Uncancel" "Cancel"))' />
                   </c:when>
                 </c:else>
               </c:if>

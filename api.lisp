@@ -21,6 +21,8 @@
            (when (typep (dm:field table "description") 'plump:node)
              (setf (dm:field table "description")
                    (plump:serialize (dm:field table "description") NIL)))
+           (setf (dm:field table "status")
+                 (string-downcase (->status (dm:field table "status"))))
            (api-output table)))))
 
 (defun handle-file (file event)
@@ -85,7 +87,8 @@
 (define-api events/cancel (id &optional (cancel-action "cancel")) ()
   (let ((event (ensure-event id)))
     (check-permission 'edit event)
-    (edit-event event :cancelled (if (string-equal cancel-action "cancel") T NIL))
+    (when (< (dm:field event "status") 2)
+      (edit-event event :status (if (string-equal cancel-action "cancel") 1 0)))
     (api-event-output event)))
 
 (define-api events/delete (id) ()

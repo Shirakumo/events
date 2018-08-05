@@ -103,11 +103,16 @@ var Events = function(){
         var time = self.localDate(event.querySelector(".duration.author .start").getAttribute("datetime"));
         var diff = self.dateTimeDifference(time, new Date());
         countdown.innerText = self.formatCountdown(diff);
+        return diff;
     };
 
     self.startCountdownUpdate = function(event){
-        if(event.querySelector(".countdown")){
-            setInterval(function(){self.updateCountdown(event);}, 1000);
+        if(event.querySelector(".countdown") && event.querySelector(".countdown").innerText.trim() != ""){
+            setInterval(function(){
+                if(self.updateCountdown(event) <= 0){
+                    window.location.href = window.location.href+"?t="+(new Date().getTime()/1000);
+                }
+            }, 1000);
         };
     };
 

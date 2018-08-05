@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="../static/events.css" @href="/static/events/events.css" />
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link rel="static" @href="/static/events/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" lquery="(attr :content (clip event :title))" />
@@ -22,20 +23,11 @@
     <header>
       <nav>
         <c:when test="(events::permitted-p :new)">
-          <a href="#" @href="events/new">
-            <i class="fa fa-plus-square fa-fw"></i>
-            Create Event
-          </a>
-          <a href="#" @href="events/list">
-            <i class="fa fa-list fa-fw"></i>
-            List Events
-          </a>
+          <a href="#" @href="events/new"><i class="fa fa-plus-square fa-fw"></i> Create Event</a>
+          <a href="#" @href="events/list"><i class="fa fa-list fa-fw"></i> Event List</a>
         </c:when>
         <c:unless test="(auth:current)">
-          <a href="#" @href="<auth page login #>">
-            <i class="fa fa-user fa-fw"></i>
-            Log In
-          </a>
+          <a href="#" @href="<auth page login #>"><i class="fa fa-user fa-fw"></i> Log In</a>
         </c:unless>
       </nav>
     </header>
@@ -47,18 +39,17 @@
         <div class="infobox message" lquery="(text message)">MESSAGE</div>
       </c:when>
       <c:using value="event">
-        
-        <article class="event" id="1" lquery='(attr :id _id) (add-class (when (= 1 cancelled) "cancelled"))'>
+        <article class="event" id="1" lquery='(attr :id _id) (add-class (events::->status status))'>
           <section class="summary">
+            <c:when test="(or* flavor)">
+              <img class="flavor" @src="/static/events/flavor/{0} flavor" alt="" />
+            </c:when>
             <h2 class="title">
-              <c:when test="(or* flavor)">
-                <img class="flavor" @src="/static/events/flavor/{0} flavor" alt="" />
-              </c:when>
               <a href="#" lquery="(text title) (attr :href link)">Something is happening I guess</a>
-              <time class="countdown" lquery="(text (events::event-countdown *))"></time>
             </h2>
+            <time class="countdown" lquery="(text (events::event-countdown *))"></time>
             <div class="durations">
-              <div class="duration author">
+              <div class="duration author" title="Global (UTC) time of the event">
                 <i class="fa fa-globe fa-fw"></i>
                 <time class="author start" lquery="(time start-stamp)">Thursday 20:00</time>
                 -
@@ -76,21 +67,33 @@
                     Edit This
                   </a>
                 </c:when>
-                <a href="#" @href="events/{0}/ical _id">
+                <a href="#" @href="events/{0}/ical _id" title="iCal files can be imported into calendar software">
                   <i class="fa fa-share-square fa-fw"></i>
                   Export iCal
                 </a>
               </nav>
               <div class="meta">
-                <i class="fa fa-repeat fa-fw"></i>
-                <span class="repeat" lquery="(text (events::interval->label interval))">Weekly</span>
-                <i class="fa fa-user fa-fw"></i>
-                <span class="author" lquery="(text author)">Some Asshole</span>
-                <i class="fa fa-clock-o fa-fw"></i>
-                <time class="created" lquery="(time time)">2017.10.20</time>
+                <c:when test="(or* link)">
+                  <span title="An associated page for the event">
+                    <i class="fa fa-link fa-fw"></i>
+                    <a class="link" lquery="(attr :href link)">Link</a>
+                  </span>
+                </c:when>
+                <span title="How often the event happens">
+                  <i class="fa fa-repeat fa-fw"></i>
+                  <span class="repeat" lquery="(text (events::interval->label interval))">Weekly</span>
+                </span>
+                <span title="Who authored the event">
+                  <i class="fa fa-user fa-fw"></i>
+                  <span class="author" lquery="(text author)">Some Asshole</span>
+                </span>
+                <span title="When the event was created">
+                  <i class="fa fa-clock-o fa-fw"></i>
+                  <time class="created" lquery="(time time)">2017.10.20</time>
+                </span>
               </div>
             </div>
-            <c:when test="(= 1 cancelled)">
+            <c:when test="(= 1 status)">
               <div class="infobox error">The event is cancelled!</div>
             </c:when>
             <div class="description" lquery="(html (events::rendered-event-description *))">
