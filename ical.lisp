@@ -12,9 +12,9 @@
     (format NIL "~4,'0d~2,'0d~2,'0dT~2,'0d~2,'0d~2,'0dZ"
             y m d hh mm ss)))
 
-(defun ical-description (description)
+(defun ical-description (event)
   (with-output-to-string (out)
-    (loop for c across (process-hidden-blocks description T)
+    (loop for c across (event-pure-description event)
           do (case c
                (#\Return
                 (format out "\\n"))
@@ -40,7 +40,7 @@ END:VEVENT
 END:VCALENDAR"
             _id (ical-time time) author (ical-time start-stamp) (ical-time (+ start-stamp (* 60 duration)))
             (case interval (1 "DAILY") (2 "WEEKLY") (3 "MONTHLY") (4 "YEARLY") (T NIL))
-            (ical-description description))))
+            (ical-description event))))
 
 (define-page ical "events/([^/]+)/ical" (:uri-groups (id))
   (let ((event (ensure-event id)))

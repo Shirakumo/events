@@ -252,11 +252,17 @@
       (vector (babel:octets-to-string value))
       (plump:node value))))
 
+(defun event-pure-description (event)
+  (with-output-to-string (out)
+    (3bmd:parse-string-and-print-to-stream
+     (process-hidden-blocks
+      (dm:field event "description")
+      (< (get-universal-time) (dm:field event "start-stamp")))
+     out :format :plain)))
+
 (defun event-short-description (event)
   (with-output-to-string (out)
-    (with-input-from-string (in (process-hidden-blocks
-                                 (dm:field event "description")
-                                 (< (get-universal-time) (dm:field event "start-stamp"))))
+    (with-input-from-string (in (event-pure-description event))
       (loop while (find (peek-char NIL in NIL) #(#\Return #\Linefeed))
             do (read-char in))
       (loop repeat 140
