@@ -232,13 +232,13 @@
 
 (defun process-hidden-blocks (text &optional remove)
   (cl-ppcre:regex-replace-all
-   "\\[\\? .*? \\?\\]"
+   "\\[\\? *(.*?) *\\?\\]"
    text
    (lambda (text s e ms me rs re)
-     (declare (ignore s e rs re))
+     (declare (ignore s e ms me))
      (if remove
          ""
-         (subseq text (+ ms 3) (- me 3))))))
+         (subseq text (aref rs 0) (aref re 0))))))
 
 (defun rendered-event-description (event)
   (let ((value (cache:with-cache (event-description (dm:id event)) NIL
