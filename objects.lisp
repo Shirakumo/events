@@ -242,10 +242,11 @@
 
 (defun rendered-event-description (event)
   (let ((value (cache:with-cache (event-description (dm:id event)) NIL
-                 (let ((text (dm:field event "description")))
-                   (with-output-to-string (o)
-                     (3bmd:parse-string-and-print-to-stream
-                      (process-hidden-blocks text (< (get-universal-time) (dm:field event "start-stamp"))) o))))))
+                 (with-output-to-string (o)
+                   (3bmd:parse-string-and-print-to-stream
+                    (process-hidden-blocks
+                     (dm:field event "description")
+                     (< (get-universal-time) (dm:field event "start-stamp"))) o)))))
     (typecase value
       (string value)
       (vector (babel:octets-to-string value))
@@ -253,7 +254,9 @@
 
 (defun event-short-description (event)
   (with-output-to-string (out)
-    (with-input-from-string (in (dm:field event "description"))
+    (with-input-from-string (in (process-hidden-blocks
+                                 (dm:field event "description")
+                                 (< (get-universal-time) (dm:field event "start-stamp"))))
       (loop while (find (peek-char NIL in NIL) #(#\Return #\Linefeed))
             do (read-char in))
       (loop repeat 140

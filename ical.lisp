@@ -14,7 +14,7 @@
 
 (defun ical-description (description)
   (with-output-to-string (out)
-    (loop for c across description
+    (loop for c across (process-hidden-blocks description T)
           do (case c
                (#\Return
                 (format out "\\n"))
