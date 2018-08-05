@@ -249,4 +249,6 @@
             (.detail
              :margin-top 0.5em
              (.bar
-             :flex-direction column))))))
+              :flex-direction column
+              (.meta
+               :justify-content space-between)))))))
