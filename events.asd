@@ -31,4 +31,5 @@
                :3bmd
                :local-time
                :babel
-               :trivial-mimes))
+               :trivial-mimes
+               :iclendar))

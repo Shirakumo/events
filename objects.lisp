@@ -258,7 +258,8 @@
                    (3bmd:parse-string-and-print-to-stream
                     (process-hidden-blocks
                      (dm:field event "description")
-                     (< (get-universal-time) (dm:field event "start-stamp"))) o)))))
+                     (< (get-universal-time) (dm:field event "start-stamp")))
+                    o)))))
     (typecase value
       (string value)
       (vector (babel:octets-to-string value))
