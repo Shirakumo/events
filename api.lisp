@@ -6,9 +6,7 @@
 
 (in-package #:org.shirakumo.radiance.events)
 
-(defvar *flavor-dir* (make-pathname :name NIL
-                                    :type NIL
-                                    :defaults (merge-pathnames "flavor/" (mconfig-pathname #.*package*))))
+(defvar *flavor-dir* (environment-module-pathname #.*package* :data "flavor/"))
 (defvar *allowed-images* #("image/jpeg" "image/png" "image/gif" "image/x-ms-bmp" "image/svg+xml"))
 
 (defun api-event-output (event)

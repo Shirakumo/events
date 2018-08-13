@@ -41,6 +41,18 @@
   (apply #'user:add-default-permissions (config :permissions :default))
   (apply #'user:grant "anonymous" (config :permissions :anonymous)))
 
+(define-version-migration events (NIL 1.0.0)
+  (let ((previous (make-pathname :name NIL
+                                 :type NIL
+                                 :defaults (merge-pathnames "flavor/" (mconfig-pathname #.*package*)))))
+    (when (uiop:directory-exists-p previous)
+      (ensure-directories-exist (environment-module-directory #.*package* :data))
+      (rename-file previous *flavor-dir*)))
+  (let ((anonymous (user:get "anonymous")))
+    (dolist (user (user:list))
+      (unless (eql user anonymous)
+        (apply #'user:grant user (config :permissions :default))))))
+
 (defun ->status (thing)
   (etypecase thing
     ((eql 0) :active)
