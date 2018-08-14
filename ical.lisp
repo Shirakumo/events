@@ -11,7 +11,7 @@
     (iclendar:make-date-time :year yy :month mm :date dd :hour h :minute m :second s :utc-p T)))
 
 (defun render-ical (event)
-  (dm:with-model-fields event (_id time author duration interval start-stamp)
+  (dm:with-model-fields event (_id title time author duration interval start-stamp)
     (let* ((domain (first (mconfig :radiance :domains)))
            (event (make-instance 'iclendar:event :uid (format NIL "shirakumo/events:~a/~d" domain _id)
                                                  :stamp (->ical-date-time time)
@@ -19,7 +19,8 @@
                                                  :organizer (uri-to-url (make-uri :domains '("user") :path (user:username author))
                                                                         :representation :external)
                                                  :end (->ical-date-time (+ start-stamp (* 60 duration)))
-                                                 :summary (event-pure-description event)))
+                                                 :summary title
+                                                 :description (event-pure-description event)))
            (calendar (make-instance 'iclendar:calendar :product (format NIL "-//shirakumo//NONSGML events/~a/EN" domain)
                                                        :components (list event))))
       (when (< 0 interval)
