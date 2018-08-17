@@ -12,7 +12,9 @@
   :license "Artistic"
   :version "1.0.0"
   :description "An event planning system for Radiance."
-  :homepage "https://github.com/Shirakumo/events"
+  :homepage "https://Shirakumo.github.io/events/"
+  :bug-tracker "https://github.com/Shirakumo/events/issues"
+  :source-control (:git "https://github.com/Shirakumo/events.git")
   :components ((:file "module")
                (:file "timedata")
                (:file "objects")
