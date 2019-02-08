@@ -267,7 +267,7 @@
     (.summary
      ((:or .title .countdown)
       :color (hex ffffff))
-     ((:or .countdown (:and .title a))
+     ((:or .countdown (:and .title > a))
       :text-stroke 1px (hex 000000))
      (.durations
       :background (rgba 0 0 0 0.5)))
@@ -321,7 +321,7 @@
     (.summary
      ((:or .title .countdown)
       :color (hex ffffff))
-     ((:or .countdown (:and .title a))
+     ((:or .countdown (:and .title > a))
       :text-stroke 1px (hex 000000))
      (.durations
       :background (rgba 255 255 255 0.5)))
