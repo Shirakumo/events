@@ -1,15 +1,30 @@
-(:let ()
+(:let ((body-bg (hex 151515))
+       (body-fg (hex eeeeee))
+       (header-bg (hex 222222))
+       (header-ln (hex ffffff))
+       (header-lnh (hex 888888))
+       (infobox-bg (hex 555555))
+       (infobox-error (hex AA0000))
+       (infobox-message (hex 558855))
+       (input-bg (hex 333333))
+       (input-fg (hex ffffff))
+       (submit-bgh (hex 888888))
+       (input-bgr (hex 202020))
+       (input-fgr (hex 888888))
+       (help-fg (hex 888888))
+       (delete-bg (hex 550000))
+       (delete-bgh (hex aa0000)))
   (a :text-decoration none)
   
   (body
    :margin 0
    :font-family "sans-serif"
    :font-size 16pt
-   :background (hex 151515)
-   :color (hex eeeeee)
+   :background #(body-bg)
+   :color #(body-fg)
 
    (header
-    :background (hex 222222)
+    :background #(header-bg)
     (h1
      :font-size 1.2em
      :text-align center
@@ -19,13 +34,13 @@
      :display flex
      :flex-direction row
      (a
-      :color (hex ffffff)
+      :color #(header-ln)
       :font-weight bold
       :padding 5px 10px 5px 5px
       :margin 1px 0 0 0
       :white-space nowrap)
      ((:and a :hover)
-      :background (hex 888888))))
+      :background #(header-lnh))))
 
    (main
     :flex-grow 1
@@ -35,35 +50,33 @@
     :margin 2em 0 1em 0
     :text-align center
     :font-size 0.75em
-    :color (hex 555555)
-    (a :color (hex 005588))
-    ((:and a :hover) :color (hex 0088ee)))
+    :opacity 0.75)
 
    ((:and .timezone :before) :content "(")
    ((:and .timezone :after) :content ")")
 
    (.infobox
-    :background (hex 555555)
+    :background #(infobox-bg)
     :padding 10px
     :margin 10px
     :text-align center
     :font-weight bold)
    (.infobox.error
-    :background (hex AA0000))
+    :background #(infobox-error))
    (.infobox.message
-    :background (hex 558855))
+    :background #(infobox-message))
 
    ("#editor"
     ((:or input textarea select)
      :border none
      :box-sizing border-box
      :display inline-block
-     :background (hex 333333)
-     :color (hex ffffff)
+     :background #(input-bg)
+     :color #(input-fg)
      :padding 5px
      :font-size inherit)
     ((:and input[type=submit] :hover)
-     :background (hex 888888)
+     :background #(submit-bgh)
      :cursor pointer)
     
     ("#title"
@@ -80,10 +93,10 @@
      (>* :width 50%
          :margin 5px 0 5px 0)
      ((:and (:or input select textarea) (:or [disabled] [readonly]))
-      :background (hex 202020)
-      :color (hex 888888))
+      :background #(input-bgr)
+      :color #(input-fgr))
      (.markup-help-button
-      :color (hex 888888))
+      :color #(help-fg))
      (.markup-help
       :display none
       :margin 0.5em
@@ -101,9 +114,9 @@
        :margin 0 0.2em
        :min-width 5em)
       ("input[value=Delete]"
-       :background (hex 550000))
+       :background #(delete-bg))
       ("input[value=Delete]:hover"
-       :background (hex aa0000)))))
+       :background #(delete-fgh)))))
    
    (.event-list
     :margin 30px
