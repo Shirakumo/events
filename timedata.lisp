@@ -53,12 +53,22 @@
            (error "Google Maps failed to perform your request for an unknown reason.")))))
 
 (defun coordinates (location)
-  (let ((data (geo-data location)))
-    (values (list (json-v data "geometry" "location" "lat")
-                  (json-v data "geometry" "location" "lng"))
-            (json-v data "address_components" 0 "long_name"))))
+  (restart-case
+      (let ((data (geo-data location)))
+        (values (list (json-v data "geometry" "location" "lat")
+                      (json-v data "geometry" "location" "lng"))
+                (json-v data "address_components" 0 "long_name")))
+    (use-value (lat/lng)
+      :report "Specify latitute and longitude to use."
+      :interactive (lambda () (list (read *query-io*)))
+      (values lat/lng location))))
 
 (defun timezone-offset (location &optional (time (get-unix-time)))
-  (let ((data (timezone-data (coordinates location) time)))
-    (values (+ (json-v data "rawOffset")
-               (json-v data "dstOffset")))))
+  (restart-case
+      (let ((data (timezone-data (coordinates location) time)))
+        (values (+ (json-v data "rawOffset")
+                   (json-v data "dstOffset"))))
+    (use-value (offset)
+      :report "Specify the offset to use."
+      :interactive (lambda () (list (read *query-io*)))
+      offset)))
