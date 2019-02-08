@@ -1,267 +1,335 @@
-(:let ((body-bg (hex 151515))
-       (body-fg (hex eeeeee))
-       (header-bg (hex 222222))
-       (header-ln (hex ffffff))
-       (header-lnh (hex 888888))
-       (infobox-bg (hex 555555))
-       (infobox-error (hex AA0000))
-       (infobox-message (hex 558855))
-       (input-bg (hex 333333))
-       (input-fg (hex ffffff))
-       (submit-bgh (hex 888888))
-       (input-bgr (hex 202020))
-       (input-fgr (hex 888888))
-       (help-fg (hex 888888))
-       (delete-bg (hex 550000))
-       (delete-bgh (hex aa0000)))
-  (a :text-decoration none)
+(:import (url "https://use.fontawesome.com/releases/v5.7.1/css/solid.css"))
+(:import (url "https://use.fontawesome.com/releases/v5.7.1/css/fontawesome.css"))
+
+;;;; Layouting
+(a :text-decoration none)
+
+(.theme-option :display none)
+
+(body
+ :margin 0
+ :font-family "sans-serif"
+ :font-size 16pt
+
+ (header
+  :border-bottom 2px solid black
+  (h1
+   :font-size 1.2em
+   :text-align center
+   :margin 5px)
+  (nav
+   :min-width 100px
+   :display flex
+   :flex-direction row
+   (>*
+    :cursor pointer
+    :font-weight bold
+    :padding 5px 10px 5px 5px
+    :margin 1px 0 0 0
+    :white-space nowrap)
+   ((:and .theme :first-of-type)
+    :margin-left auto)))
+
+ (main
+  :flex-grow 1
+  (h1 :text-align center))
+
+ (footer
+  :margin 2em 0 1em 0
+  :text-align center
+  :font-size 0.75em
+  :opacity 0.75)
+
+ ((:and .timezone :before) :content "(")
+ ((:and .timezone :after) :content ")")
+
+ (.infobox
+  :padding 10px
+  :margin 10px
+  :text-align center
+  :font-weight bold)
+
+ ("#editor"
+  ((:or input textarea select)
+   :border none
+   :box-sizing border-box
+   :display inline-block
+   :padding 5px
+   :font-size inherit)
+  ((:and input[type=submit] :hover)
+   :cursor pointer)
   
-  (body
-   :margin 0
-   :font-family "sans-serif"
-   :font-size 16pt
-   :background #(body-bg)
-   :color #(body-fg)
-
-   (header
-    :background #(header-bg)
-    (h1
-     :font-size 1.2em
-     :text-align center
-     :margin 5px)
-    (nav
-     :min-width 100px
-     :display flex
-     :flex-direction row
-     (a
-      :color #(header-ln)
-      :font-weight bold
-      :padding 5px 10px 5px 5px
-      :margin 1px 0 0 0
-      :white-space nowrap)
-     ((:and a :hover)
-      :background #(header-lnh))))
-
-   (main
-    :flex-grow 1
-    (h1 :text-align center))
-
-   (footer
-    :margin 2em 0 1em 0
-    :text-align center
-    :font-size 0.75em
-    :opacity 0.75)
-
-   ((:and .timezone :before) :content "(")
-   ((:and .timezone :after) :content ")")
-
-   (.infobox
-    :background #(infobox-bg)
-    :padding 10px
-    :margin 10px
-    :text-align center
-    :font-weight bold)
-   (.infobox.error
-    :background #(infobox-error))
-   (.infobox.message
-    :background #(infobox-message))
-
-   ("#editor"
-    ((:or input textarea select)
-     :border none
-     :box-sizing border-box
-     :display inline-block
-     :background #(input-bg)
-     :color #(input-fg)
-     :padding 5px
-     :font-size inherit)
-    ((:and input[type=submit] :hover)
-     :background #(submit-bgh)
-     :cursor pointer)
-    
-    ("#title"
-     :font-size 2em
-     :padding 10px
-     :text-align center
-     :width 100%)
-    ("#inputs"
-     :max-width 1024px
-     :margin 0 auto 0 auto
-     :padding 10px
-     :display flex
-     :flex-wrap wrap
-     (>* :width 50%
-         :margin 5px 0 5px 0)
-     ((:and (:or input select textarea) (:or [disabled] [readonly]))
-      :background #(input-bgr)
-      :color #(input-fgr))
-     (.markup-help-button
-      :color #(help-fg))
-     (.markup-help
-      :display none
-      :margin 0.5em
-      (pre :margin 0))
-     ("#markup:checked ~ .markup-help"
-      :display block)
-     (textarea
-      :width 100%
-      :min-height 200px)
-     ("#buttons"
-      :width 100%
-      :display flex
-      :justify-content flex-end
-      (input[type=submit]
-       :margin 0 0.2em
-       :min-width 5em)
-      ("input[value=Delete]"
-       :background #(delete-bg))
-      ("input[value=Delete]:hover"
-       :background #(delete-fgh)))))
-   
-   (.event-list
-    :margin 30px
-    :padding 0
-    :list-style none
-    (.event
-     :margin 0.2em 0
-     (.summary
-      :display flex
-      :background (hex 333333)
-      (.title
-       :font-size 1.5em
-       :margin 0 5px 0 0
-       :flex-grow 1
-       (a :color (hex FFFFFF)
-          :padding 0.2em 0.5em
-          :display block
-          :white-space nowrap
-          :overflow hidden
-          :text-overflow ellipsis)
-       ((:and a :hover)
-        :color (hex ee8800)))
-      (.durations
-       :display flex
-       :flex-direction column
-       :justify-content space-around
-       :font-size 0.75em
-       :margin 0 1em
-       (.duration
-        :display flex
-        (time
-         :display inline-block
-         :text-align center
-         :min-width 10em))))))
-   
-   (main>.event
-    :margin 0 auto 10px auto
-    (.summary
-     :background (hex 333333)
+  ("#title"
+   :font-size 2em
+   :padding 10px
+   :text-align center
+   :width 100%)
+  ("#inputs"
+   :max-width 1024px
+   :margin 0 auto 0 auto
+   :padding 10px
+   :display flex
+   :flex-wrap wrap
+   (>* :width 50%
+       :margin 5px 0 5px 0)
+   (.markup-help
+    :display none
+    :margin 0.5em
+    (pre :margin 0))
+   (.markup-help-button
+    :cursor pointer)
+   ("#markup:checked ~ .markup-help"
+    :display block)
+   (textarea
+    :width 100%
+    :min-height 200px)
+   ("#buttons"
+    :width 100%
+    :display flex
+    :justify-content flex-end
+    (input[type=submit]
+     :margin 0 0.2em
+     :min-width 5em))))
+ 
+ (.event-list
+  :margin 30px
+  :padding 0
+  :list-style none
+  (.event
+   :margin 0.2em 0
+   (.summary
+    :display flex
+    (.title
+     :font-size 1.5em
+     :margin 0 5px 0 0
+     :flex-grow 1
+     (a :padding 0.2em 0.5em
+        :display block
+        :white-space nowrap
+        :overflow hidden
+        :text-overflow ellipsis))
+    (.durations
      :display flex
      :flex-direction column
-     :justify-content center
-     :overflow hidden
-     :position relative
-     :min-height 12em
-     :height 33vh
-     :transition 0.5s height
-     :transition-delay 0.5s
-     (.flavor
-      :position absolute
-      :left -10px :top -10px
-      :width "calc(100% + 20px)"
-      :height "calc(100% + 20px)"
-      :object-fit cover
-      :object-position 50% 50%
-      :z-index 0
-      :transition 0.5s filter
-      :transition-delay 0.5s
-      :filter (blur 10px))
-     (.title
-      (a
-       :text-stroke 1px (hex 000)
-       :color inherit
-       :font-size 1.4em)
-      ((:and a :hover)
-       :color (hex ee8800)))
-     ((:or .title .countdown)
-      :font-size 2em
-      :color (hex ffffff)
-      :margin 0.25em 0
-      :text-align center
-      :z-index 10)
-     (.countdown
-      :font-weight bold
-      :text-stroke 1px (hex 000)
-      :font-family monospace
-      :margin-bottom 3em)
-     (.durations
-      :position absolute
-      :left 0 :right 0 :bottom 0
-      :z-index 10
-      :background (rgba 0 0 0 0.5)
-      (.duration
-       :display flex
-       :align-items center
-       :justify-content center
-       :text-align center
-       (time :display inline-block
-             :width 150px)
-       (.timezone :width 0px))
-      (.duration.author
-       :color (hex aaaaaa))))
-    ((:and .summary :hover)
-     :height 66vh
-     (.flavor :filter (blur 0px)))
-    (.detail
-     :max-width 1024px
-     :margin 2em auto 0 auto
-     :padding 0.5em
-     (a :color inherit)
-     ((:and a :hover) :color (hex ee8800))
-     (.bar
+     :justify-content space-around
+     :font-size 0.75em
+     :margin 0 1em
+     (.duration
       :display flex
-      :justify-content space-between
-      ((:or nav .meta)
-       :display flex
-       :flex-wrap wrap
-       (>* :white-space nowrap
-           :margin 0 0.2em)))
-     (.description
-      (h1 :font-size 1.75em)
-      (blockquote
-       :border-left 3px solid (hex 333333)
-       :margin 0 :padding-left 15px)
-      (code :background (hex 333333)
-            :padding 2px
-            :border-radius 2px)
-      (pre
-       (code :display block))
-      (a :color (hex ee8800))
-      ((:and a :hover) :color (hex ffcc00))))))
+      (time
+       :display inline-block
+       :text-align center
+       :min-width 10em))))))
+ 
+ (main>.event
+  :margin 0 auto 10px auto
+  (.summary
+   :display flex
+   :flex-direction column
+   :justify-content center
+   :overflow hidden
+   :position relative
+   :min-height 12em
+   :height 33vh
+   :transition 0.5s height
+   :transition-delay 0.5s
+   (.flavor
+    :position absolute
+    :left -10px :top -10px
+    :width "calc(100% + 20px)"
+    :height "calc(100% + 20px)"
+    :object-fit cover
+    :object-position 50% 50%
+    :z-index 0
+    :transition 0.5s filter
+    :transition-delay 0.5s
+    :filter (blur 10px))
+   (.title
+    (a
+     :color inherit
+     :font-size 1.4em))
+   ((:or .title .countdown)
+    :font-size 2em
+    :margin 0.25em 0
+    :text-align center
+    :z-index 10)
+   (.countdown
+    :font-weight bold
+    :font-family monospace
+    :margin-bottom 3em)
+   (.durations
+    :position absolute
+    :left 0 :right 0 :bottom 0
+    :z-index 10
+    (.duration
+     :display flex
+     :align-items center
+     :justify-content center
+     :text-align center
+     (time :display inline-block
+           :width 150px)
+     (.timezone :width 0px))
+    (.duration.author
+     :color inherit)))
+  ((:and .summary :hover)
+   :height 66vh
+   (.flavor :filter (blur 0px)))
+  (.detail
+   :max-width 1024px
+   :margin 2em auto 0 auto
+   :padding 0.5em
+   (.bar
+    :display flex
+    :justify-content space-between
+    ((:or nav .meta)
+     :display flex
+     :flex-wrap wrap
+     (>* :white-space nowrap
+         :margin 0 0.2em)))
+   (.description
+    (h1 :font-size 1.75em)
+    (blockquote
+     :border-left 3px solid black
+     :margin 0 :padding-left 15px)
+    (code
+     :padding 2px
+     :border-radius 2px)
+    (pre
+     (code :display block))))))
 
-  (:media (:max-width 800px)
-          (body
-           :font-size 14pt
-           (header
-            :font-size 1.2em
-            (nav :text-align center))
-           (.event-list
-            :margin 0
-            (.event
-             (.summary
-              (.title :width 100%)
-              (.durations :display none))))
-           (main>.event
-            :min-height 100vh
-            (.summary
-             :height 50vh
-             (.durations
-              (.timezone :display none)))
-            ((:and .summary :hover)
-             :height 100vh)
-            (.detail
-             :margin-top 0.5em
-             (.bar
-              :flex-direction column
-              (.meta
-               :justify-content space-between)))))))
+(:media (:max-width 800px)
+        (body
+         :font-size 14pt
+         (header
+          :font-size 1.2em
+          (nav :text-align center))
+         (.event-list
+          :margin 0
+          (.event
+           (.summary
+            (.title :width 100%)
+            (.durations :display none))))
+         (main>.event
+          :min-height 100vh
+          (.summary
+           :height 50vh
+           (.durations
+            (.timezone :display none)))
+          ((:and .summary :hover)
+           :height 100vh)
+          (.detail
+           :margin-top 0.5em
+           (.bar
+            :flex-direction column
+            (.meta
+             :justify-content space-between))))))
+
+;;;; Theming
+;;; Dark
+(:let ((link-fg (hex ee8800))
+       (link-fgh (hex ffaa33)))
+  ((:and "#theme-dark" :checked ~ body)
+   :background (hex 151515)
+   :color (hex eeeeee)
+   (a :color #(link-fg))
+   ((:and a :hover) :color #(link-fgh))
+   (header
+    :background (hex 222222)
+    :border-color (hex ee8800)
+    (nav
+     (>* :color (hex ffffff))
+     ((:and >* :hover)
+      :color inherit
+      :background (hex 888888))))
+   (.infobox :background (hex 555555))
+   (.infobox.error :background (hex aa0000))
+   (.infobox.message :background (hex 558855))
+   ("#editor"
+    ((:or input textarea select)
+     :background (hex 333333)
+     :color (hex ffffff))
+    ((:and input[type=submit] :hover)
+     :background (hex 888888))
+    ("#inputs"
+     ((:and (:or input select textarea) (:or [disabled] [readonly]))
+      :background (hex 202020)
+      :color (hex 888888))
+     (.markup-help-button
+      :color (hex 888888))
+     ("input[value=Delete]"
+      :background (hex 550000))
+     ("input[value=Delete]:hover"
+      :background (hex aa0000))))
+   (.event
+    (.summary
+     :background (hex 333333)))
+   (main>.event
+    (.summary
+     ((:or .title .countdown)
+      :color (hex ffffff))
+     ((:or .countdown (:and .title a))
+      :text-stroke 1px (hex 000000))
+     (.durations
+      :background (rgba 0 0 0 0.5)))
+    (.detail
+     (.bar
+      ((:or nav .meta)
+       (a :color inherit)
+       ((:and a :hover) :color #(link-fgh))))
+     (.description
+      (blockquote :border-color (hex 333333))
+      (code :background (hex 333333)))))))
+
+;;; Light
+(:let ((link-fg (hex 0088ee))
+       (link-fgh (hex 00eeff)))
+  ((:and "#theme-light" :checked ~ body)
+   :background (hex eeeeee)
+   :color (hex 151515)
+   (a :color #(link-fg))
+   ((:and a :hover) :color #(link-fgh))
+   (header
+    :background (hex ffffff)
+    :border-color (hex 0088ee)
+    (nav
+     (>* :color inherit)
+     ((:and >* :hover)
+      :color inherit
+      :background (hex dddddd))))
+   (.infobox :background (hex aaaaaa))
+   (.infobox.error :background (hex ff3333))
+   (.infobox.message :background (hex 55ff55))
+   ("#editor"
+    ((:or input textarea select)
+     :background (hex dddddd)
+     :color inherit)
+    ((:and input[type=submit] :hover)
+     :background (hex ffffff))
+    ("#inputs"
+     ((:and (:or input select textarea) (:or [disabled] [readonly]))
+      :color (hex 555555))
+     (.markup-help-button
+      :color (hex 888888))
+     ("input[value=Delete]"
+      :background (hex dd3333))
+     ("input[value=Delete]:hover"
+      :background (hex ff5555))))
+   (.event
+    (.summary
+     :background (hex ffffff)))
+   (main>.event
+    (.summary
+     ((:or .title .countdown)
+      :color (hex ffffff))
+     ((:or .countdown (:and .title a))
+      :text-stroke 1px (hex 000000))
+     (.durations
+      :background (rgba 255 255 255 0.5)))
+    (.detail
+     (.bar
+      ((:or nav .meta)
+       (a :color inherit)
+       ((:and a :hover) :color #(link-fgh))))
+     (.description
+      (blockquote :border-color (hex 333333))
+      (code :background (hex 333333)))))))

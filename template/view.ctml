@@ -4,7 +4,6 @@
     <meta charset="utf-8" />
     <title><c:splice lquery='(text (clip event :title))'></c:splice> - Events</title>
     <link rel="stylesheet" type="text/css" href="../static/events.css" @href="/static/events/events.css" />
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link rel="static" @href="/static/events/" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
@@ -19,16 +18,24 @@
     <meta property="og:description" lquery='(attr :content (events::event-short-description event))' />
     <meta property="og:image" lquery='(attr :content (r-clip:resolve-uri "/static/events/flavor/{0}" (clip event :flavor)))' />
   </head>
+  <input class="theme-option" name="theme" type="radio" id="theme-dark" checked />
+  <input class="theme-option" name="theme" type="radio" id="theme-light"/>
   <body>
     <header>
       <nav>
         <c:when test="(events::permitted-p :new)">
-          <a href="#" @href="events/new"><i class="fa fa-plus-square fa-fw"></i> Create Event</a>
+          <a href="#" @href="events/new"><i class="fas fa-plus fa-fw"></i> Create Event</a>
         </c:when>
-        <a href="#" @href="events/list"><i class="fa fa-list fa-fw"></i> Event List</a>
+        <a href="#" @href="events/list"><i class="fas fa-list-ul fa-fw"></i> Event List</a>
         <c:unless test="(auth:current)">
-          <a href="#" @href="<auth page login #>"><i class="fa fa-user fa-fw"></i> Log In</a>
+          <a href="#" @href="<auth page login #>"><i class="fas fa-user fa-fw"></i> Log In</a>
         </c:unless>
+        <label class="theme" for="theme-dark" title="Switch to a dark colour scheme">
+          <i class="fas fa-fw fa-moon"></i>
+        </label>
+        <label class="theme" for="theme-light" title="Switch to a light colour scheme">
+          <i class="fas fa-fw fa-sun"></i>
+        </label>
       </nav>
     </header>
     <main>
@@ -50,7 +57,7 @@
             <time class="countdown" lquery="(text (events::event-countdown *))"></time>
             <div class="durations">
               <div class="duration author" title="Global (UTC) time of the event">
-                <i class="fa fa-globe fa-fw"></i>
+                <i class="fas fa-globe fa-fw"></i>
                 <time class="author start" lquery="(time start-stamp)">Thursday 20:00</time>
                 -
                 <time class="author end" lquery="(time (+ start-stamp (* 60 duration)))">Thursday 22:00</time>
@@ -63,12 +70,12 @@
               <nav>
                 <c:when test="(events::permitted-p '(:edit :delete) *)">
                   <a href="#" @href="events/{0}/edit _id">
-                    <i class="fa fa-pencil-square fa-fw"></i>
+                    <i class="fas fa-edit fa-fw"></i>
                     Edit This
                   </a>
                 </c:when>
                 <a href="#" @href="events/{0}/ical _id" title="iCal files can be imported into calendar software">
-                  <i class="fa fa-share-square fa-fw"></i>
+                  <i class="fas fa-share-square fa-fw"></i>
                   Export iCal
                 </a>
               </nav>
@@ -80,15 +87,15 @@
                   </span>
                 </c:when>
                 <span title="How often the event happens">
-                  <i class="fa fa-repeat fa-fw"></i>
+                  <i class="fas fa-redo fa-fw"></i>
                   <span class="repeat" lquery="(text (events::interval->label interval))">Weekly</span>
                 </span>
                 <span title="Who authored the event">
-                  <i class="fa fa-user fa-fw"></i>
+                  <i class="fas fa-user fa-fw"></i>
                   <span class="author" lquery="(text author)">Some Asshole</span>
                 </span>
                 <span title="When the event was created">
-                  <i class="fa fa-clock-o fa-fw"></i>
+                  <i class="fas fa-clock fa-fw"></i>
                   <time class="created" lquery="(time time)">2017.10.20</time>
                 </span>
               </div>

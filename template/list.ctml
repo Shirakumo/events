@@ -4,19 +4,26 @@
     <meta charset="utf-8" />
     <title><c:splice lquery='(text (clip event :title))'></c:splice> - Events</title>
     <link rel="stylesheet" type="text/css" href="../static/events.css" @href="/static/events/events.css" />
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>
+  <input class="theme-option" name="theme" type="radio" id="theme-dark" checked />
+  <input class="theme-option" name="theme" type="radio" id="theme-light"/>
   <body>
     <header>
       <nav>
         <c:when test="(events::permitted-p :new)">
-          <a href="#" @href="events/new"><i class="fa fa-plus-square fa-fw"></i> Create Event</a>
+          <a href="#" @href="events/new"><i class="fas fa-plus fa-fw"></i> Create Event</a>
         </c:when>
-        <a href="#" @href="events/list"><i class="fa fa-list fa-fw"></i> Event List</a>
+        <a href="#" @href="events/list"><i class="fas fa-list-ul fa-fw"></i> Event List</a>
         <c:unless test="(auth:current)">
-          <a href="#" @href="<auth page login #>"><i class="fa fa-user fa-fw"></i> Log In</a>
+          <a href="#" @href="<auth page login #>"><i class="fas fa-user fa-fw"></i> Log In</a>
         </c:unless>
+        <label class="theme" for="theme-dark" title="Switch to a dark colour scheme">
+          <i class="fas fa-fw fa-moon"></i>
+        </label>
+        <label class="theme" for="theme-light" title="Switch to a light colour scheme">
+          <i class="fas fa-fw fa-sun"></i>
+        </label>
       </nav>
     </header>
     <main>
@@ -33,7 +40,7 @@
             <h2 class="title"><a href="#" @href="events/{0}#{0} _id" lquery="(text title)">Something is happening I guess</a></h2>
             <div class="durations">
               <div class="duration author">
-                <i class="fa fa-globe fa-fw"></i>
+                <i class="fas fa-globe fa-fw"></i>
                 <time class="author start" lquery="(time start-stamp)">Thursday 20:00</time>
                 -
                 <time class="author end" lquery="(time (+ start-stamp (* 60 duration)))">Thursday 22:00</time>

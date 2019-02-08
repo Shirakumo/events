@@ -121,6 +121,20 @@ var Events = function(){
         self.startCountdownUpdate(event);
     };
 
+    self.initThemeButton = function(button){
+        var theme = button.getAttribute("for");
+        button.addEventListener("click", function(){
+            window.localStorage.setItem("theme", theme);
+        });
+    };
+
+    self.restoreTheme = function(){
+        var button = window.localStorage.getItem("theme");
+        if(button){
+            document.getElementById(button).click();
+        }
+    };
+
     self.init = function(){    
         var editor = document.getElementById("editor");
         if(editor) self.initEditor(editor);
@@ -128,6 +142,12 @@ var Events = function(){
         var events = document.getElementsByClassName("event");
         for(var event of events){
             self.initEvent(event);
+        }
+
+        self.restoreTheme();
+        var themes = document.getElementsByClassName("theme");
+        for(var theme of themes){
+            self.initThemeButton(theme);
         }
     };
 };
