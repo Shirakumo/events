@@ -13,7 +13,7 @@
   (let ((drakma:*text-content-types* (list* (cons "application" "json")
                                             drakma:*text-content-types*))
         (drakma:*drakma-default-external-format* :utf-8))
-    (yason:parse (drakma:http-request url :parameters (list* (cons "key" key) parameters)))))
+    (com.inuoe.jzon:parse (drakma:http-request url :parameters (list* (cons "key" key) parameters)))))
 
 (defun json-v (data &rest keys)
   (if (null keys)

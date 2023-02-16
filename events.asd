@@ -26,7 +26,7 @@
                (:interface :auth)
                (:interface :cache)
                :drakma
-               :yason
+               :com.inuoe.jzon
                :cl-ppcre
                :r-data-model
                :r-clip
