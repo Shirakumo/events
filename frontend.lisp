@@ -1,9 +1,3 @@
-#|
- This file is a part of Events
- (c) 2016 Shirakumo http://tymoon.eu (shinmera@tymoon.eu)
- Author: Nicolas Hafner <shinmera@tymoon.eu>
-|#
-
 (in-package #:org.shirakumo.radiance.events)
 
 (define-page list-events "events/^$|(?:list(?:/([^/]+))?)" (:uri-groups (page) :clip "list.ctml")
