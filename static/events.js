@@ -77,7 +77,7 @@ var Events = function(){
     };
 
     self.localDate = function(date){
-        return new Date(Date.parse(date+"Z"));
+        return new Date(Date.parse(date));
     };
 
     self.dateTimeDifference = function(a, b){
