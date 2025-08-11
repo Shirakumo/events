@@ -6,9 +6,9 @@
   :license "zlib"
   :version "1.0.0"
   :description "An event planning system for Radiance."
-  :homepage "https://Shirakumo.github.io/events/"
-  :bug-tracker "https://github.com/Shirakumo/events/issues"
-  :source-control (:git "https://github.com/Shirakumo/events.git")
+  :homepage "https://shirakumo.org/docs/events/"
+  :bug-tracker "https://shirakumo.org/project/events/issues"
+  :source-control (:git "https://shirakumo.org/project/events.git")
   :components ((:file "module")
                (:file "timedata")
                (:file "objects")
